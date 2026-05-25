@@ -44,8 +44,7 @@ public class EmployeeInput {
 		
 		System.out.println("Enter Salary: ");
 		double salary=sc.nextDouble();
-		System.out.println("Enter PartTime or FullTime:");
-		String parttime=sc.nextLine();
+		
 		
 		System.out.println("\n Employee Added Successfully");
 		System.out.println("\n============== EMPLOYEE DETAILS=================");
