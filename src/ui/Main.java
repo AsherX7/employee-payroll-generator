@@ -29,23 +29,43 @@ public class EmployeeInput {
 		System.out.println("Enter the Department: ");
 		String department=sc.nextLine();
 		
+		System.out.println("Select Employee Type");
+		System.out.println("1.Full Time");
+		System.out.println("2.Part Time");
+		System.out.println("Enter Choice:");
+		int choice=sc.nextInt();
+		sc.nextLine();
+		String employeeType;
+		if(choice==1) {
+			employeeType="Full Time";
+		}
+		else if(choice==2) {
+			employeeType="Part Time";
+		}
+		else {
+			employeeType="Invalid";
+		}
 		System.out.println("Enter the  Employee Experience(years): ");
 		int experience=sc.nextInt();
 		sc.nextLine();
 		
 		System.out.println("Enter Salary: ");
 		double salary=sc.nextDouble();
+		System.out.println("Enter PartTime or FullTime:");
+		String parttime=sc.nextLine();
 		
 		System.out.println("\n Employee Added Successfully");
 		System.out.println("\n============== EMPLOYEE DETAILS=================");
 		System.out.println("Employee id:"+id);
 		System.out.println("Employee Name:"+name);
 		System.out.println("Deapartment:"+department);
+		System.out.println("Employee Type:"+employeeType);
 		System.out.println("Experience:"+experience + "years");
 		System.out.println("Salary:"+salary);
+	
+		
 		
 
 	}
 
 }
-
