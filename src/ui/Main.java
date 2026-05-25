@@ -1,18 +1,11 @@
-/**
- * 
- */
+
 package in.ac.tkmit.payroll;
 import java.util.Scanner;
-/**
- * 
- */
+
 public class EmployeeInput {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		// EMPLOYEE PAYROLL GENERATOR UI AREA
 		Scanner sc=new Scanner(System.in);
 		System.out.println("=========================================================");
 		System.out.println("                   ADD EMPLOYEE");
