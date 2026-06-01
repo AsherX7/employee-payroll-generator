@@ -9,9 +9,13 @@ public class Employee {
     // Attributes
     private int empId;
     private String name;
+    private String department;
     private String employeeType;
-    private double basicSalary;
-    private int daysWorked;
+    private int yearsExp;
+    private double hourlyRate;
+    private int hoursWorked;
+    private double salary;
+    
    
     // Default Constructor
     public Employee() {
@@ -19,14 +23,18 @@ public class Employee {
     }
 
     // Parameterized Constructor
-    public Employee(int empId, String name, String employeeType,
-                    double basicSalary,int daysWorked) {
+    public Employee(int empId, String name, String department,String employeeType,
+    		int yearsExp,double hourlyRate, int hoursWorked,double salary) {
 
         this.empId = empId;
         this.name = name;
+        this.department=department;
         this.employeeType = employeeType;
-        this.basicSalary = basicSalary;
-        this.daysWorked=daysWorked;
+        this.yearsExp=yearsExp;
+        this.hourlyRate=hourlyRate;
+        this.hoursWorked=hoursWorked;
+        this.salary = salary;
+        
        
     }
 
@@ -40,45 +48,60 @@ public class Employee {
         this.empId = empId;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getEmployeeType() {
+    public String getName() {
+        return name;
+    }
+    
+    public String getEmpType() {
         return employeeType;
     }
 
-    public void setEmployeeType(String employeeType) {
+    public void setEmpType(String employeeType) {
         this.employeeType = employeeType;
     }
-
-    public double getBasicSalary() {
-        return basicSalary;
+    
+    public void setYearsExp(int yearsExp) {
+    	this.yearsExp=yearsExp;
+    }
+    
+    public int getYearsExp() {
+    	return yearsExp;
     }
 
-    public void setBasicSalary(double basicSalary) {
-        this.basicSalary = basicSalary;
+    public double getHrate() {
+        return hourlyRate;
     }
 
-    public int getDaysWorked() {
-        return daysWorked;
+    public void setHrate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+    public int getHwork() {
+        return hoursWorked;
     }
 
-    public void setDaysWorked(int daysWorked) {
-        this.daysWorked = daysWorked;
+    public void setHwork(int hoursWorked) {
+        this.hoursWorked = hoursWorked;
+    }
+    
+    public double getSalary() {
+        return salary;
     }
 
-    // Display Employee Details
-    public void displayEmployeeDetails() {
-
-        System.out.println("Employee ID : " + empId);
-        System.out.println("Name        : " + name);
-        System.out.println("Type        : " + employeeType);
-        System.out.println("Salary      : " + basicSalary);
-        System.out.println("Days Worked : " + daysWorked);
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
+
+	public String getDep() {
+		return department;
+	}
+
+	public void setD(String department) {
+		this.department = department;
+	}
 }
+
+    
