@@ -1,3 +1,11 @@
+CREATE SCHEMA `payroll_schema` ;
+
+
+
+
+
+
+
 CREATE TABLE payrollservice_schema.payroll (
 	emp_type VARCHAR(10) NOT NULL,tax_name VARCHAR(30) NULL,tax_per DOUBLE NULL,tax_type VARCHAR(20)
 NULL);
