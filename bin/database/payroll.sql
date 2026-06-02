@@ -6,10 +6,10 @@ CREATE SCHEMA `payroll_schema` ;
 
 
 
-CREATE TABLE payrollservice_schema.payroll (
+CREATE TABLE payroll_schema.payroll (
 	emp_type VARCHAR(10) NOT NULL,tax_name VARCHAR(30) NULL,tax_per DOUBLE NULL,tax_type VARCHAR(20)
 NULL);
-INSERT INTO payrollservice_schema.payroll
+INSERT INTO payroll_schema.payroll
 (emp_type,tax_name,tax_per,tax_type)
 VALUES
 ("FULLTIME","INCOME TAX",10.0,"DEDUCTION"),
@@ -26,7 +26,7 @@ VALUES
 ("PARTTIME","INTERNET ALLOWANCE",2.0,"ALLOWANCE");
 
 
-CREATE TABLE `payrollservice_schema`.`employee_allowances` (
+CREATE TABLE `payroll_schema`.`employee_allowances` (
   `emp_id` VARCHAR(10) NOT NULL,
   `allowance_name` VARCHAR(45) NULL,
   `amount` DOUBLE NULL);
