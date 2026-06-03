@@ -1,7 +1,8 @@
 package dao;
-
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 public class AllowanceDAO{
 	Connection conn = DBConnection.getConnection();
 	// FOR ADDING ALLOWANCES TO THE TABLE
@@ -15,13 +16,18 @@ public void addAllowance(
         "(emp_id, allowance_name, amount) " +
         "VALUES (?, ?, ?)";
 
-    PreparedStatement ps =conn.prepareStatement(sql);
-
+    PreparedStatement ps;
+	try {
+		ps = conn.prepareStatement(sql);
     ps.setInt(1, empId);
     ps.setString(2, allowanceName);
     ps.setDouble(3, amount);
 
     ps.executeUpdate();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 }
 // FOR UPDATING TABLE
 public void updateAllowance(
@@ -33,15 +39,18 @@ public void updateAllowance(
         "UPDATE employee_allowances " +
         "SET allowance_name=?,amount=? WHERE emp_id=?";
 
-    PreparedStatement ps =
-        conn.prepareStatement(sql);
-
+    try {
+    PreparedStatement ps= conn.prepareStatement(sql);
     ps.setString(1, allowanceName); 
     ps.setDouble(2, amount);         
-    ps.setInt(3, empId);            
-
-
+    ps.setInt(3, empId);  
     ps.executeUpdate();
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+    
 }
 // TO GET TOTAL ALLOWANCE FOR AN EMPLOYEE
 public static double gettotalAllowance(int empId)
