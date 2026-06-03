@@ -24,7 +24,7 @@ public class LoginFrame  extends JFrame{
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBounds(120, 40, 400, 40);
 
-        JLabel logoLabel = new JLabel("COMPANY LOGO");
+        JLabel logoLabel = new JLabel("src/ui/logo.png");
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
         logoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         logoLabel.setBounds(225, 90, 150, 80);
@@ -84,9 +84,8 @@ public class LoginFrame  extends JFrame{
     }
 
     private void setDefaultCloseOperation(int exitOnClose) {
-		// TODO Auto-generated method stub
-		
-	}
+    	
+    }
 
 	private void setLocationRelativeTo(Object object) {
 		// TODO Auto-generated method stub
