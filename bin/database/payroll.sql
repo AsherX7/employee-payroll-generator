@@ -2,9 +2,34 @@ CREATE SCHEMA `payroll_schema` ;
 
 
 
+//database1
 
+use payroll_schema;
+create table employee(
+employeeid varchar(10) primary key,
+name varchar(20) not null,
+department varchar(25) not null,
+type varchar(20),
+year_exp int,
+hourly_rate int,
+hours_worked int,
+Salary int
+);
+iNSERT INTO employee
+VALUES
+('E01','Febi Shaji','HR','Full-time',2,0,0,25000),
+('E02','Stephy Wilson','IT','Part-time',1,200,50,10000),
+('E03','Sophie Edward','Finance','Full-time',4,0,0,40000),
+('E04','Meera Krishna','Marketing','Part-time',2,150,40,6000),
+('E05','NikhiL Dev','IT','Full-time',3,0,0,35000),
+('E06','Johin P','HR','Part-time',1,180,45,8100);
+UPDATE employee
+SET salary = 30000
+WHERE employeeid = 'E01';
+DELETE FROM employee
+WHERE employeeid = 'E06';
 
-
+//database2
 
 CREATE TABLE payroll_schema.payroll (
 	emp_type VARCHAR(10) NOT NULL,tax_name VARCHAR(30) NULL,tax_per DOUBLE NULL,tax_type VARCHAR(20)
@@ -24,6 +49,7 @@ VALUES
 ("PARTTIME","PROFESSIONAL TAX",1.0,"DEDUCTION"),
 ("PARTTIME","INTERNET ALLOWANCE",2.0,"ALLOWANCE");
 
+//database3
 
 CREATE TABLE `payroll_schema`.`employee_allowances` (
   `emp_id` VARCHAR(10) NOT NULL,
