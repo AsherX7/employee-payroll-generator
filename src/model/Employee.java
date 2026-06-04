@@ -99,7 +99,7 @@ public class Employee {
 		return department;
 	}
 
-	public void setD(String department) {
+	public void setDep(String department) {
 		this.department = department;
 	}
 }
