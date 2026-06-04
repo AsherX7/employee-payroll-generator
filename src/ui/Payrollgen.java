@@ -1,116 +1,135 @@
-
-
 package ui;
-
-
-
+//IMPORTS
 import javax.swing.*;
 import java.awt.*;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-
+import dao.EmployeeDAO;
 import model.Employee;
 import service.PayrollService;
 
-public class Payrollgen extends JFrame{
-    
-	 
-	private static final long serialVersionUID = -8527493745696243885L;
-	
-	private JTextField idField;
-    private JTextField nameField;
-    private JTextField salaryField;
-    private JTextField typeField;
+public class Payrollgen extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
+    private JTextField idField;
     private JTextArea outputArea;
-
     private JButton generateButton;
+    private JButton backButton;
 
     public Payrollgen() {
 
         setTitle("Payslip Generator");
-        setSize(600, 600);
+        setSize(700, 500);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        idField = new JTextField(20);
-        nameField = new JTextField(20);
-        salaryField = new JTextField(20);
-        typeField = new JTextField(20);
-
-        outputArea = new JTextArea(15, 40);
+        // Components
+        idField = new JTextField(15);
+        outputArea = new JTextArea();
         outputArea.setEditable(false);
-
+        outputArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
         generateButton = new JButton("Generate Payslip");
+        backButton = new JButton("Back");
 
-        JPanel formPanel = new JPanel(new GridLayout(1, 2, 5, 10));
+        // Top Panel
+        JPanel formPanel = new JPanel();
+
         formPanel.add(new JLabel("Employee ID"));
         formPanel.add(idField);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // Button Panel
+        JPanel buttonPanel = new JPanel();
+
         buttonPanel.add(generateButton);
-        
-        JPanel topContainer = new JPanel();
-        topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.Y_AXIS));
-        
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        topContainer.add(formPanel);
-        topContainer.add(buttonPanel);
-        
-        add(topContainer, BorderLayout.NORTH);
+        buttonPanel.add(backButton);
+
+        // Container
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        topPanel.add(formPanel);
+        topPanel.add(buttonPanel);
+        add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(outputArea), BorderLayout.CENTER);
-        
 
-        generateButton.addActionListener(e ->{try{
+        // Generate Payslip
+        generateButton.addActionListener(e -> generatePayslip());
 
-                Employee emp = new Employee();
+        // Back Button
+        backButton.addActionListener(e -> {
 
-                emp.setEmpId(Integer.parseInt(idField.getText()));
-                emp.setName(nameField.getText());
-                emp.setSalary(Double.parseDouble(salaryField.getText()));
-                emp.setEmpType(typeField.getText());
+            new HomeFrame(); // Replace with your Dashboard class
+            dispose();
 
-                PayrollService PayrollService = new PayrollService();
-                double netSalary = PayrollService.calculateNetSalary(emp);
-
-                String payslip =
-                		"                                       " +
-                        "=====================================\n" +
-                        "          EMPLOYEE PAYSLIP\n" +
-                        "=====================================\n" +
-                        "Employee ID      : " + emp.getEmpId() + "\n" +
-                        "Employee Name    : " + emp.getName() + "\n" +
-                        "Employee Type    : " + emp.getEmpType() + "\n" +
-                        "-------------------------------------\n" +
-                        "Basic Salary     : ₹" + String.format("%.2f", emp.getSalary()) + "\n" +
-                        "Increments       : Calculated by Payroll Service\n" +
-                        "Deductions       : Calculated by Payroll Service\n" +
-                        "-------------------------------------\n" +
-                        "Net Salary       : ₹" + String.format("%.2f", netSalary) + "\n" +
-                        "=====================================";
-
-                outputArea.setText(payslip);
-
-            } 
-        
-        catch (Exception ex){
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        ex.getMessage(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
-            }
         });
 
         setVisible(true);
-        
     }
 
-    public static void main(String[] args){
-        new Payrollgen();
-        
+    private void generatePayslip() {
+
+        try {
+
+            String empId = idField.getText().trim();
+
+            if(empId.isEmpty()) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Enter Employee ID"
+                );
+                return;
+            }
+
+            EmployeeDAO dao = new EmployeeDAO();
+
+            // Create this method in EmployeeDAO
+            Employee emp = dao.getEmployeeById(empId);
+
+            if(emp == null) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Employee Not Found"
+                );
+                return;
+            }
+
+            PayrollService payrollService = new PayrollService();
+
+            double netSalary =
+                    payrollService.calculateNetSalary(emp);
+
+            String payslip =
+                    "=====================================\n" +
+                    "          EMPLOYEE PAYSLIP\n" +
+                    "=====================================\n" +
+                    "Employee ID   : " + emp.getEmpId() + "\n" +
+                    "Employee Name : " + emp.getName() + "\n" +
+                    "Employee Type : " + emp.getEmpType() + "\n" +
+                    "-------------------------------------\n" +
+                    "Basic Salary  : ₹" +
+                    String.format("%.2f", emp.getSalary()) + "\n" +
+                    "-------------------------------------\n" +
+                    "Net Salary    : ₹" +
+                    String.format("%.2f", netSalary) + "\n" +
+                    "=====================================";
+
+            outputArea.setText(payslip);
+
+        }
+        catch(Exception ex) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
-    
+
+    public static void main(String[] args) {
+
+        new Payrollgen();
+    }
 }

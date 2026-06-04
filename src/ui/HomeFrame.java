@@ -26,6 +26,18 @@ public class HomeFrame extends JFrame {
         panel.add(payrollBtn);
 
         add(panel);
+        
+        //actions
+        modifyBtn.addActionListener(e -> {
+            new ModifyEmp();
+        });
+               
+        payslipBtn.addActionListener(e -> {
+            new Payrollcalc();
+        });
+        payrollBtn.addActionListener(e -> {
+            new Payrollgen();
+        });
 
         setVisible(true);
     }

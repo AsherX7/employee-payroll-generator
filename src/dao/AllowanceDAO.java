@@ -52,7 +52,7 @@ public class AllowanceDAO {
     }
 
     // TO GET TOTAL ALLOWANCE FOR AN EMPLOYEE
-    public double getTotalAllowance(int empId) {
+    public double getTotalAllowance(String empId) {
 
         String sql =
             "SELECT SUM(amount) AS total " +
@@ -62,7 +62,7 @@ public class AllowanceDAO {
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setInt(1, empId);
+            ps.setString(1, empId);
 
             ResultSet rs = ps.executeQuery();
 
@@ -102,5 +102,31 @@ public class AllowanceDAO {
         }
 
         return 0.0;
+    }
+    // to update tax percentage in payroll table
+    public boolean updateTaxPer(
+            String taxName,
+            double percentage) {
+
+        try {
+
+            String sql =
+                "UPDATE payroll SET tax_per=? WHERE tax_name=?";
+
+            PreparedStatement ps =
+                conn.prepareStatement(sql);
+
+            ps.setDouble(1, percentage);
+            ps.setString(2, taxName);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

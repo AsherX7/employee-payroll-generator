@@ -33,20 +33,19 @@ public class EmployeeDAO {
 			System.out.println("Employee ID:"+employeeId);
 			
 		}
-		
-		public Employee searchEmployee(int empId) {
-		    //search code
+		//search code
+		public Employee searchEmployee(String empId) {
 		    Employee emp = null;
 		    try {
 		    Connection con = DBConnection.getConnection();
 		    String query = "SELECT * FROM employee WHERE employeeid=?";
 		    PreparedStatement pst = con.prepareStatement(query);
-		    pst.setInt(1, empId);
+		    pst.setString(1, empId);
 		    ResultSet rs = pst.executeQuery();
 		    if (rs.next()) {
 
 		        emp = new Employee();
-		        emp.setEmpId(rs.getInt("employeeid"));
+		        emp.setEmpId(rs.getString("employeeid"));
 		        emp.setName(rs.getString("name"));
 		        emp.setDep(rs.getString("department"));
 		        emp.setEmpType(rs.getString("type"));
@@ -80,7 +79,7 @@ public class EmployeeDAO {
 		        pst.setDouble(5, emp.getHrate());
 		        pst.setInt(6, emp.getHwork());
 		        pst.setDouble(7, emp.getSalary());
-		        pst.setInt(8, emp.getEmpId());
+		        pst.setString(8, emp.getEmpId());
 
 		        int rows = pst.executeUpdate();
 
@@ -92,5 +91,45 @@ public class EmployeeDAO {
 
 		    return false;
 		}
-		
+		public Employee getEmployeeById(String empId) {
+			Connection conn= DBConnection.getConnection();
+		    Employee emp = null;
+
+		    try {
+
+		        String sql =
+		            "SELECT * FROM employee WHERE employeeid=?";
+
+		        PreparedStatement ps =
+		            conn.prepareStatement(sql);
+
+		        ps.setString(1, empId);
+
+		        System.out.println("Searching for: " + empId);
+
+		        ResultSet rs = ps.executeQuery();
+
+		        if(rs.next()) {
+
+		            System.out.println("Employee Found!");
+
+		            emp = new Employee();
+
+		            emp.setEmpId(rs.getString("employeeid"));
+		            emp.setName(rs.getString("name"));
+		            emp.setEmpType(rs.getString("type"));
+		            emp.setSalary(rs.getDouble("salary"));
+		        }
+		        else {
+
+		            System.out.println("No employee found");
+		        }
+
+		    } catch(Exception e) {
+
+		        e.printStackTrace();
+		    }
+
+		    return emp;
+		}
 }

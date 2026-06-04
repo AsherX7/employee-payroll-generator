@@ -7,7 +7,7 @@ package model;
 public class Employee {
 
     // Attributes
-    private int empId;
+    private String empId;
     private String name;
     private String department;
     private String employeeType;
@@ -23,7 +23,7 @@ public class Employee {
     }
 
     // Parameterized Constructor
-    public Employee(int empId, String name, String department,String employeeType,
+    public Employee(String empId, String name, String department,String employeeType,
     		int yearsExp,double hourlyRate, int hoursWorked,double salary) {
 
         this.empId = empId;
@@ -40,11 +40,11 @@ public class Employee {
 
     // Getters and Setters
 
-    public int getEmpId() {
+    public String getEmpId() {
         return empId;
     }
 
-    public void setEmpId(int empId) {
+    public void setEmpId(String empId) {
         this.empId = empId;
     }
 

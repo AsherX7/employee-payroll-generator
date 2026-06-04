@@ -9,12 +9,12 @@ public class DBConnection {
         Connection con = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
+        	Class.forName("com.mysql.cj.jdbc.Driver");
+            
             con = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/payroll_schema",
                 "root",
-                "ur_password"
+                "ngelsql"
             );
 
             System.out.println("Connected!");
