@@ -8,30 +8,46 @@ import model.Employee;
 
 public class EmployeeDAO {
 	// ADD EMPLOYEE
-	public void addEmployee(int employeeId,
-			                String name,
-			                String department,
-			                String type,
-			                int year_exp,
-			                double hourly_rate,
-			                int hourly_worked,
-			                double salary) {
-		System.out.println("Employee Added Successfully");
-		System.out.println("Employee ID:"+employeeId);
-		System.out.println("Employee name:"+name);
-		System.out.println("Department:"+department);
-		System.out.println("Employee Type:"+type);
-		System.out.println("Experience:"+year_exp);
-		System.out.println("Hourly_Rate:"+hourly_rate);
-		System.out.println("Hourly_Worked:"+hourly_worked);
-		System.out.println("Salary:"+salary);
-	}
+		public void addEmployee(int employeeId,
+                String name,
+                String department,
+                String type,
+                int year_exp,
+                double hourly_rate,
+                int hours_worked,
+                double salary) {
+try {
+Connection con=DBConnection.getConnection();
+String query="INSERT INTO employee(employeeid,name,department,type,year_exp,hourly_rate,hours_worked,salary) VALUES(?,?,?,?,?,?,?,?)";
+PreparedStatement pst=con.prepareStatement(query);
+pst.setInt(1, employeeId);
+pst.setString(2,name);
+pst.setString(3,department);
+pst.setString(4,type);
+pst.setInt(5,year_exp);
+pst.setDouble(6,hourly_rate);
+pst.setInt(7,hours_worked);
+pst.setDouble(8,salary);
+pst.executeUpdate();
+System.out.println("Employee added successfully");
+} catch(Exception e) {
+e.printStackTrace();
+}
+}
 		
 		// DELETE EMPLOYEE
 		public void deleteEmployee(int employeeId) {
-			System.out.println("Employee deleted successfully");
-			System.out.println("Employee ID:"+employeeId);
-			
+			try {
+				Connection con=DBConnection.getConnection();
+				String query=
+						"DELETE FROM employee WHERE employeeid=?";
+				PreparedStatement pst=con.prepareStatement(query);
+				pst.setInt(1,employeeId);
+				pst.executeUpdate();
+				System.out.println("Employee deleted successfully");
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		//search code
 		public Employee searchEmployee(String empId) {
