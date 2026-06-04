@@ -62,6 +62,7 @@ public class EmployeeDAO {
 		    }
 		    return emp;
 		}
+		// Update
 		public boolean updateEmployee(Employee emp) {
 
 		    try {
