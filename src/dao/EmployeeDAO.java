@@ -48,7 +48,7 @@ public class EmployeeDAO {
 		        emp = new Employee();
 		        emp.setEmpId(rs.getInt("employeeid"));
 		        emp.setName(rs.getString("name"));
-		        emp.setD(rs.getString("department"));
+		        emp.setDep(rs.getString("department"));
 		        emp.setEmpType(rs.getString("type"));
 		        emp.setYearsExp(rs.getInt("year_exp"));
 		        emp.setHrate(rs.getDouble("hourly_rate"));
