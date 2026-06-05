@@ -1,12 +1,14 @@
 package ui;
 //IMPORTS
+
 import javax.swing.*;
 import java.awt.*;
 import dao.EmployeeDAO;
 import model.Employee;
 import service.PayrollService;
+import utils.Validation;
 
-public class Payrollgen extends JFrame {
+public class PayrollGen extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,7 +17,7 @@ public class Payrollgen extends JFrame {
     private JButton generateButton;
     private JButton backButton;
 
-    public Payrollgen() {
+    public PayrollGen() {
 
         setTitle("Payslip Generator");
         setSize(700, 500);
@@ -79,7 +81,19 @@ public class Payrollgen extends JFrame {
                 );
                 return;
             }
-
+            
+            
+            if(!Validation.isValidEmployeeId(empId)) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid Employee ID format.\nMust start with 'E' followed by digits (e.g. E1001)",
+                    "Validation Error",
+                    JOptionPane.WARNING_MESSAGE
+                );
+                return;
+            }
+            
+            
             EmployeeDAO dao = new EmployeeDAO();
 
             // Create this method in EmployeeDAO
@@ -93,7 +107,8 @@ public class Payrollgen extends JFrame {
                 );
                 return;
             }
-
+            
+            
             PayrollService payrollService = new PayrollService();
 
             double netSalary =
@@ -113,10 +128,9 @@ public class Payrollgen extends JFrame {
                     "Net Salary    : ₹" +
                     String.format("%.2f", netSalary) + "\n" +
                     "=====================================";
-
+            
             outputArea.setText(payslip);
-
-        }
+    } 
         catch(Exception ex) {
 
             JOptionPane.showMessageDialog(
@@ -126,10 +140,10 @@ public class Payrollgen extends JFrame {
                     JOptionPane.ERROR_MESSAGE
             );
         }
-    }
-
+}
     public static void main(String[] args) {
 
-        new Payrollgen();
+        new PayrollGen();
     }
 }
+

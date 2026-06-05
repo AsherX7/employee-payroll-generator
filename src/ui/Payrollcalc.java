@@ -59,9 +59,34 @@ import dao.AllowanceDAO;
 
      private void saveTax() {
 
-         String taxName = txtTaxName.getText();
-         double percentage =
-                 Double.parseDouble(txtTaxPer.getText());
+         String taxName = txtTaxName.getText().trim();
+         String percentageText = txtTaxPer.getText().trim();
+
+         
+         double percentage;
+         try {
+             percentage = Double.parseDouble(percentageText);
+         } catch(NumberFormatException e) {
+             JOptionPane.showMessageDialog(
+                 this,
+                 "Percentage must be a valid number",
+                 "Validation Error",
+                 JOptionPane.WARNING_MESSAGE
+             );
+             return;
+         }
+
+         // Range check
+         if(percentage <= 0 || percentage > 100) {
+             JOptionPane.showMessageDialog(
+                 this,
+                 "Percentage must be between 0 and 100",
+                 "Validation Error",
+                 JOptionPane.WARNING_MESSAGE
+             );
+             return;
+         }
+         
 
          AllowanceDAO dao = new AllowanceDAO();
 
@@ -81,3 +106,4 @@ import dao.AllowanceDAO;
          }
      }
  }
+ 

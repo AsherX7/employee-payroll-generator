@@ -6,7 +6,6 @@ import model.Employee;
 
 public class PayrollService{
 	// SALARY CALCULATION
-	Employee emp=new Employee();
 	AllowanceDAO dao = new AllowanceDAO();
 	public double calculateNetSalary(Employee emp) {
 	
