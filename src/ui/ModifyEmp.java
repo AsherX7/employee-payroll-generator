@@ -166,7 +166,61 @@ public class ModifyEmp extends JFrame {
                 }
             }
         });
+        JButton btnAdd = new JButton("Add");
+        btnAdd.setBounds(350, 300, 100, 30);
+        add(btnAdd);
 
+        btnAdd.addActionListener(e -> {
+
+            try {
+
+                EmployeeDAO dao = new EmployeeDAO();
+
+                dao.addEmployee(
+                    txtId.getText(),
+                    txtName.getText(),
+                    txtDepartment.getText(),
+                    txtType.getText(),
+                    Integer.parseInt(txtExp.getText()),
+                    Double.parseDouble(txtRate.getText()),
+                    Integer.parseInt(txtHours.getText()),
+                    Double.parseDouble(txtSalary.getText())
+                );
+
+                JOptionPane.showMessageDialog(null,
+                        "Employee Added Successfully");
+
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(null,
+                        "Error while adding employee");
+
+                ex.printStackTrace();
+            }
+        });
+        JButton btnDelete = new JButton("Delete");
+        btnDelete.setBounds(350, 350, 100, 30);
+        add(btnDelete);
+
+        btnDelete.addActionListener(e -> {
+
+            try {
+
+                EmployeeDAO dao = new EmployeeDAO();
+
+                dao.deleteEmployee(txtId.getText());
+
+                JOptionPane.showMessageDialog(null,
+                        "Employee Deleted Successfully");
+
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(null,
+                        "Error while deleting employee");
+
+                ex.printStackTrace();
+            }
+        });
         setVisible(true);
     }
 
