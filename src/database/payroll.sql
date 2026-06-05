@@ -28,6 +28,9 @@ SET salary = 30000
 WHERE employeeid = 'E01';
 DELETE FROM employee
 WHERE employeeid = 'E06';
+ALTER TABLE `payroll_schema`.`employee` 
+CHANGE COLUMN `hourly_rate` `hourly_rate` DOUBLE NULL DEFAULT NULL ,
+CHANGE COLUMN `Salary` `Salary` DOUBLE NULL DEFAULT NULL ;
 
 //database2
 
