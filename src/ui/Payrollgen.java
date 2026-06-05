@@ -143,7 +143,7 @@ public class Payrollgen extends JFrame {
 }
     public static void main(String[] args) {
 
-        new PayrollGen();
+        new Payrollgen();
     }
 }
 
