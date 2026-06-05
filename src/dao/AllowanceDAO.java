@@ -10,7 +10,7 @@ public class AllowanceDAO {
     Connection conn = DBConnection.getConnection();
 
     // FOR ADDING ALLOWANCES TO THE TABLE
-    public void addAllowance(int empId, String allowanceName, double amount) {
+    public void addAllowance(String i, String allowanceName, double amount) {
 
         String sql = "INSERT INTO employee_allowances "
                    + "(emp_id, allowance_name, amount) "
@@ -19,7 +19,7 @@ public class AllowanceDAO {
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setInt(1, empId);
+            ps.setString(1, i);
             ps.setString(2, allowanceName);
             ps.setDouble(3, amount);
 

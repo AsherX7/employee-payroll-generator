@@ -58,4 +58,10 @@ CREATE TABLE `payroll_schema`.`employee_allowances` (
   `emp_id` VARCHAR(10) NOT NULL,
   `allowance_name` VARCHAR(45) NULL,
   `amount` DOUBLE NULL);
-  
+  INSERT INTO employee_allowances
+VALUES
+('E01','Overtime',5000),
+('E02','DA',500),
+('E03','MA',1000),
+('E04','MA',1000),
+('E04','TA',800);

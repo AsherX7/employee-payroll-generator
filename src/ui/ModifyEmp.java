@@ -1,8 +1,9 @@
 package ui;
 
 import javax.swing.*;
+import dao.AllowanceDAO;
 import java.awt.event.*;
-
+import javax.swing.table.DefaultTableModel;
 import dao.EmployeeDAO;
 import model.Employee;
 
@@ -20,7 +21,7 @@ public class ModifyEmp extends JFrame {
     public ModifyEmp() {
 
         setTitle("Modify Employee");
-        setSize(600, 500);
+        setSize(850, 750);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -220,10 +221,22 @@ public class ModifyEmp extends JFrame {
                 ex.printStackTrace();
             }
         });
-        setVisible(true);
-    }
+        
+    
+        JButton btnAllowance = new JButton("Allowance Table");
+        btnAllowance.setBounds(350, 250, 150, 30); 
+        add(btnAllowance);
 
-    public static void main(String[] args) {
-        new ModifyEmp();
-    }
-}
+        btnAllowance.addActionListener(e -> {
+            new AllowanceFrame(txtId.getText()); 
+        });
+
+        revalidate();
+        repaint();
+        setVisible(true);
+        }
+
+        public static void main(String[] args) {
+            new ModifyEmp();
+        }
+        }

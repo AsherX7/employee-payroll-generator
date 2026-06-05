@@ -8,7 +8,7 @@ import model.Employee;
 import service.PayrollService;
 import utils.Validation;
 
-public class PayrollGen extends JFrame {
+public class Payrollgen extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +17,7 @@ public class PayrollGen extends JFrame {
     private JButton generateButton;
     private JButton backButton;
 
-    public PayrollGen() {
+    public Payrollgen() {
 
         setTitle("Payslip Generator");
         setSize(700, 500);
@@ -143,7 +143,7 @@ public class PayrollGen extends JFrame {
 }
     public static void main(String[] args) {
 
-        new PayrollGen();
+        new Payrollgen();
     }
 }
 
