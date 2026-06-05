@@ -128,11 +128,10 @@ public class ModifyEmp extends JFrame {
         JButton btnUpdate = new JButton("Update");
         btnUpdate.setBounds(350, 400, 100, 30);
         add(btnUpdate);
+        //update
 
         btnUpdate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	
-            
+            public void actionPerformed(ActionEvent e) {        
 
                 try {
                     Employee emp = new Employee();
@@ -144,9 +143,9 @@ public class ModifyEmp extends JFrame {
                     emp.setEmpType(txtType.getText());
 
                     emp.setYearsExp(Integer.parseInt(txtExp.getText()));
-                    emp.setHrate(Integer.parseInt(txtRate.getText()));
+                    emp.setHrate(Double.parseDouble(txtRate.getText()));
                     emp.setHwork(Integer.parseInt(txtHours.getText()));
-                    emp.setSalary(Integer.parseInt(txtSalary.getText()));
+                    emp.setSalary(Double.parseDouble(txtSalary.getText()));
 
                     EmployeeDAO dao = new EmployeeDAO();
 

@@ -8,7 +8,7 @@ import model.Employee;
 
 public class EmployeeDAO {
 	// ADD EMPLOYEE
-		public void addEmployee(int employeeId,
+		public void addEmployee(String employeeId,
                 String name,
                 String department,
                 String type,
@@ -20,7 +20,7 @@ try {
 Connection con=DBConnection.getConnection();
 String query="INSERT INTO employee(employeeid,name,department,type,year_exp,hourly_rate,hours_worked,salary) VALUES(?,?,?,?,?,?,?,?)";
 PreparedStatement pst=con.prepareStatement(query);
-pst.setInt(1, employeeId);
+pst.setString(1, employeeId);
 pst.setString(2,name);
 pst.setString(3,department);
 pst.setString(4,type);
@@ -36,13 +36,13 @@ e.printStackTrace();
 }
 		
 		// DELETE EMPLOYEE
-		public void deleteEmployee(int employeeId) {
+		public void deleteEmployee(String employeeId) {
 			try {
 				Connection con=DBConnection.getConnection();
 				String query=
 						"DELETE FROM employee WHERE employeeid=?";
 				PreparedStatement pst=con.prepareStatement(query);
-				pst.setInt(1,employeeId);
+				pst.setString(1,employeeId);
 				pst.executeUpdate();
 				System.out.println("Employee deleted successfully");
 			}catch(Exception e) {
