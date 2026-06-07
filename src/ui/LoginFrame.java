@@ -9,11 +9,12 @@ import java.awt.*;
 
 public class LoginFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-
+//login button defined
     
     private JButton loginButton;
 
     public LoginFrame() {
+    	//heading
 
         setTitle("Employee Payroll Generator");
         setSize(600, 450);
@@ -26,7 +27,7 @@ public class LoginFrame extends JFrame {
         JLabel titleLabel = new JLabel("EMPLOYEE PAYROLL SYSTEM");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBounds(120, 40, 400, 40);
-
+//logo
         ImageIcon icon = new ImageIcon(
                 getClass().getResource("logo.png")
         );
@@ -44,8 +45,7 @@ public class LoginFrame extends JFrame {
         logoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         logoLabel.setBounds(225, 90, 150, 80);
 
-       
-
+    //login button   
         
         loginButton = new JButton("Login");
         loginButton.setBounds(250, 310, 100, 35);
