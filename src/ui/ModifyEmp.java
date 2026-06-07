@@ -239,75 +239,112 @@ public class ModifyEmp extends JFrame {
         public static void main(String[] args) {
             new ModifyEmp();
         }
+        
+        //===================== ALLOWANCE FRAME =====================
+        
         public class AllowanceFrame extends JFrame {
-        	private static final long serialVersionUID = 1L;
+
+            private static final long serialVersionUID = 1L;
+
+            DefaultTableModel model;
+            JTable table;
+            String empId;
 
             public AllowanceFrame(String empId) {
+
+                this.empId = empId;
+
                 setTitle("Allowance Management");
-                setSize(750, 400);
+                setSize(750, 450);
                 setLayout(null);
-                setLocationRelativeTo(null); 
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+                setLocationRelativeTo(null);
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-             // 1. Employee ID Display (Created as a button at the top)
-                JButton btnEmpIdDisplay = new JButton("Employee ID: " + empId);
-                btnEmpIdDisplay.setBounds(30, 15, 180, 30);
-                btnEmpIdDisplay.setEnabled(false); // Makes it look like a neat label-button, non-clickable
-                add(btnEmpIdDisplay);
+                JLabel lblEmpId = new JLabel("Employee ID: " + empId);
+                lblEmpId.setBounds(30, 15, 200, 30);
+                add(lblEmpId);
 
-                // 2. Table Setup (Only 2 columns now: Name and Amount)
                 String[] columns = {"Allowance Name", "Amount"};
-                DefaultTableModel model = new DefaultTableModel(columns, 0);
-                JTable table = new JTable(model);
-                table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                model = new DefaultTableModel(columns, 0);
+                table = new JTable(model);
 
-                // Moved Y down to 55 to leave room for the ID button at the top
                 JScrollPane scrollPane = new JScrollPane(table);
-                scrollPane.setBounds(30, 55, 500, 240);
+                scrollPane.setBounds(30, 55, 500, 250);
                 add(scrollPane);
 
-                // 3. Add Row Button
+                AllowanceDAO dao = new AllowanceDAO();
+
+                // Load existing allowances
+                for (String[] row : dao.getAllowances(empId)) {
+                    model.addRow(row);
+                }
+
                 JButton btnAddRow = new JButton("Add Row");
                 btnAddRow.setBounds(560, 55, 140, 30);
                 add(btnAddRow);
 
-                btnAddRow.addActionListener(e -> {
-                    model.addRow(new Object[]{"", ""});
-                });
+                btnAddRow.addActionListener(e ->
+                        model.addRow(new Object[]{"", ""}));
 
-                // 4. Save Button
-                JButton btnSave = new JButton("Save Allowance");
-                btnSave.setBounds(560, 100, 140, 30);
-                add(btnSave);
+                JButton btnDeleteRow = new JButton("Delete Row");
+                btnDeleteRow.setBounds(560, 100, 140, 30);
+                add(btnDeleteRow);
 
-                btnSave.addActionListener(e -> {
+                btnDeleteRow.addActionListener(e -> {
+
                     int row = table.getSelectedRow();
-                    if (row != -1) {
-                        try {
-                            String name = model.getValueAt(row, 0).toString();
-                            double amount = Double.parseDouble(model.getValueAt(row, 1).toString());
-                            
-                            // Uses the background empId from the constructor
-                            AllowanceDAO dao = new AllowanceDAO();
-                            dao.addAllowance(empId, name, amount);
-                            
-                            JOptionPane.showMessageDialog(this, "Saved Successfully!");
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-                        }
+
+                    if (row >= 0) {
+                        model.removeRow(row);
                     } else {
-                        JOptionPane.showMessageDialog(this, "Please select a row first!");
+                        JOptionPane.showMessageDialog(this,
+                                "Select a row first!");
                     }
                 });
 
-                // 5. Back Button
-                JButton btnBack = new JButton("Back");
-                btnBack.setBounds(560, 145, 140, 30);
-                add(btnBack);
+                JButton btnSave = new JButton("Save");
+                btnSave.setBounds(560, 145, 140, 30);
+                add(btnSave);
 
-                btnBack.addActionListener(e -> {
-                    dispose(); 
+                btnSave.addActionListener(e -> {
+
+                    try {
+
+                        AllowanceDAO dao1 = new AllowanceDAO();
+
+                        for (int i = 0; i < model.getRowCount(); i++) {
+
+                            String name = model.getValueAt(i, 0).toString().trim();
+                            String amt = model.getValueAt(i, 1).toString().trim();
+
+                            if (name.isEmpty() || amt.isEmpty())
+                                continue;
+
+                            double amount = Double.parseDouble(amt);
+
+                            if (dao1.exists(empId, name)) {
+                                dao1.updateAllowance(empId, name, amount);
+                            } else {
+                                dao1.addAllowance(empId, name, amount);
+                            }
+                        }
+
+                        JOptionPane.showMessageDialog(this,
+                                "Saved Successfully!");
+
+                    } catch (Exception ex) {
+
+                        JOptionPane.showMessageDialog(this,
+                                ex.getMessage());
+                    }
                 });
 
-                setVisible(true);}}
-        }
+                JButton btnBack = new JButton("Back");
+                btnBack.setBounds(560, 190, 140, 30);
+                add(btnBack);
+
+                btnBack.addActionListener(e -> dispose());
+
+                setVisible(true);
+            }
+        }}

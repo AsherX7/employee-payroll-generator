@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 public class AllowanceDAO {
 
     Connection conn = DBConnection.getConnection();
@@ -31,7 +31,7 @@ public class AllowanceDAO {
     }
 
     // FOR UPDATING TABLE
-    public void updateAllowance(int empId, String allowanceName, double amount) {
+    public void updateAllowance(String empId, String allowanceName, double amount) {
 
         String sql = "UPDATE employee_allowances "
                    + "SET allowance_name=?, amount=? "
@@ -42,7 +42,7 @@ public class AllowanceDAO {
 
             ps.setString(1, allowanceName);
             ps.setDouble(2, amount);
-            ps.setInt(3, empId);
+            ps.setString(3, empId);
 
             ps.executeUpdate();
 
@@ -124,6 +124,55 @@ public class AllowanceDAO {
             return rows > 0;
 
         } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
+    // used in allowanceframe
+    public ArrayList<String[]> getAllowances(String empId) {
+
+        ArrayList<String[]> list = new ArrayList<>();
+
+        try {
+
+            String sql = "SELECT allowance_name, amount FROM employee_allowances WHERE emp_id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, empId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                list.add(new String[] {
+                    rs.getString("allowance_name"),
+                    String.valueOf(rs.getDouble("amount"))
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    
+    //exist
+    public boolean exists(String empId, String allowanceName) {
+
+        try {
+            String sql = "SELECT * FROM employee_allowances WHERE emp_id=? AND allowance_name=?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, empId);
+            ps.setString(2, allowanceName);
+
+            ResultSet rs = ps.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
