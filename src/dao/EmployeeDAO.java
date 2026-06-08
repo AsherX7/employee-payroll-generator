@@ -148,4 +148,31 @@ e.printStackTrace();
 
 		    return emp;
 		}
+		
+//validating login credentials
+		public boolean validateLogin(String username, String password) {
+
+String sql =
+"SELECT * FROM employee "
++ "WHERE username=? AND password=?";
+
+try {
+	Connection conn=DBConnection.getConnection();
+PreparedStatement ps =
+   conn.prepareStatement(sql);
+
+ps.setString(1, username);
+ps.setString(2, password);
+
+ResultSet rs = ps.executeQuery();
+
+return rs.next();
+
+}catch(Exception e) {
+
+    e.printStackTrace();
+}
+
+return false;
+}
 }
