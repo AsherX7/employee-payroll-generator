@@ -1,109 +1,219 @@
- package ui;
- //imports
- import javax.swing.*;
+package ui;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.sql.ResultSet;
 import dao.AllowanceDAO;
-//class
- public class Payrollcalc extends JFrame {
-	 private static final long serialVersionUID = 1L;
-     private JTextField txtTaxName;
-     private JTextField txtTaxPer;
-     private JButton btnSave;
-     private JButton backButton;
-     
-     public Payrollcalc() {
 
-         setTitle("Tax Management");
-         setSize(400,300);
-         setLocationRelativeTo(null);
-         setLayout(null);
+public class Payrollcalc extends JFrame {
 
-         JLabel lblTaxName = new JLabel("Tax Name:");
-         lblTaxName.setBounds(50,50,100,25);
+    private JTextField txtEmpType;
+    private JTextField txtTaxName;
+    private JTextField txtTaxPer;
+    private JTextField txtType;
 
-         txtTaxName = new JTextField();
-         txtTaxName.setBounds(150,50,150,25);
+    private JTable table;
+    private DefaultTableModel model;
 
-         JLabel lblTaxPer = new JLabel("Percentage:");
-         lblTaxPer.setBounds(50,100,100,25);
+    private JButton btnSave, btnUpdate, btnDelete;
 
-         txtTaxPer = new JTextField();
-         txtTaxPer.setBounds(150,100,150,25);
+    public Payrollcalc() {
 
-         btnSave = new JButton("Save");
-         btnSave.setBounds(150,170,100,30);
-         add(btnSave);
-         //backbutton
-         backButton = new JButton("Back");
-         backButton.setBounds(40,170,100,30);
-         add(backButton);
-                 
-         backButton.addActionListener(e -> {
+        setTitle("Payroll Calculation");
+        setSize(1000, 600);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(null);
 
-             new HomeFrame(); // Replace with your Dashboard class
-             dispose();
-             
-         });
-         
-         setVisible(true);
-         
-         add(lblTaxName);
-         add(txtTaxName);
-         add(lblTaxPer);
-         add(txtTaxPer);
-         add(btnSave);
+        getContentPane().setBackground(new Color(245, 248, 255));
 
-         btnSave.addActionListener(e -> saveTax());
+        // ================= NAVY TITLE BAR =================
+        JPanel titleBar = new JPanel();
+        titleBar.setBounds(0, 0, 1000, 60);
+        titleBar.setBackground(new Color(4, 24, 82));
+        titleBar.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-         setVisible(true);
-     }
+        JLabel title = new JLabel("PAYROLL CALCULATION");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 24));
 
-     private void saveTax() {
+        titleBar.add(title);
+        add(titleBar);
 
-         String taxName = txtTaxName.getText().trim();
-         String percentageText = txtTaxPer.getText().trim();
+        // ================= FORM =================
+        JLabel l1 = new JLabel("Employee Type");
+        l1.setBounds(50, 90, 150, 25);
 
-         
-         double percentage;
-         try {
-             percentage = Double.parseDouble(percentageText);
-         } catch(NumberFormatException e) {
-             JOptionPane.showMessageDialog(
-                 this,
-                 "Percentage must be a valid number",
-                 "Validation Error",
-                 JOptionPane.WARNING_MESSAGE
-             );
-             return;
-         }
+        txtEmpType = new JTextField();
+        txtEmpType.setBounds(200, 90, 200, 28);
 
-         // Range check
-         if(percentage <= 0 || percentage > 100) {
-             JOptionPane.showMessageDialog(
-                 this,
-                 "Percentage must be between 0 and 100",
-                 "Validation Error",
-                 JOptionPane.WARNING_MESSAGE
-             );
-             return;
-         }
-         
+        JLabel l2 = new JLabel("Tax Name");
+        l2.setBounds(50, 130, 150, 25);
 
-         AllowanceDAO dao = new AllowanceDAO();
+        txtTaxName = new JTextField();
+        txtTaxName.setBounds(200, 130, 200, 28);
 
-         boolean status =
-                 dao.updateTaxPer(taxName, percentage);
+        JLabel l3 = new JLabel("Percentage");
+        l3.setBounds(50, 170, 150, 25);
 
-         if(status) {
-             JOptionPane.showMessageDialog(
-                     this,
-                     "Tax Updated Successfully"
-             );
-         } else {
-             JOptionPane.showMessageDialog(
-                     this,
-                     "Update Failed"
-             );
-         }
-     }
- }
- 
+        txtTaxPer = new JTextField();
+        txtTaxPer.setBounds(200, 170, 200, 28);
+
+        JLabel l4 = new JLabel("Type");
+        l4.setBounds(50, 210, 150, 25);
+
+        txtType = new JTextField();
+        txtType.setBounds(200, 210, 200, 28);
+
+        add(l1);
+        add(txtEmpType);
+        add(l2);
+        add(txtTaxName);
+        add(l3);
+        add(txtTaxPer);
+        add(l4);
+        add(txtType);
+
+        // ================= BUTTONS =================
+        btnSave = new JButton("SAVE");
+        btnSave.setBounds(450, 100, 120, 35);
+        btnSave.setBackground(new Color(4, 24, 82));
+        btnSave.setForeground(Color.WHITE);
+
+        btnUpdate = new JButton("UPDATE");
+        btnUpdate.setBounds(450, 150, 120, 35);
+        btnUpdate.setBackground(new Color(0, 153, 76));
+        btnUpdate.setForeground(Color.WHITE);
+
+        btnDelete = new JButton("DELETE");
+        btnDelete.setBounds(450, 200, 120, 35);
+        btnDelete.setBackground(Color.RED);
+        btnDelete.setForeground(Color.WHITE);
+
+        add(btnSave);
+        add(btnUpdate);
+        add(btnDelete);
+
+        // ================= TABLE =================
+        String[] cols = {"Employee Type", "Tax Name", "Percentage", "Type"};
+        model = new DefaultTableModel(cols, 0);
+
+        table = new JTable(model);
+
+        // ⭐ NAVY HEADER STYLE
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        table.getTableHeader().setBackground(new Color(4, 24, 82));
+        table.getTableHeader().setForeground(Color.WHITE);
+
+        table.setRowHeight(25);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+        JScrollPane sp = new JScrollPane(table);
+        sp.setBounds(50, 280, 880, 250);
+
+        add(sp);
+
+        // ================= LOAD DATA =================
+        loadTable();
+
+        // ================= TABLE CLICK =================
+        table.getSelectionModel().addListSelectionListener(e -> {
+
+            int row = table.getSelectedRow();
+
+            if (row >= 0) {
+
+                txtEmpType.setText(model.getValueAt(row, 0).toString());
+                txtTaxName.setText(model.getValueAt(row, 1).toString());
+                txtTaxPer.setText(model.getValueAt(row, 2).toString());
+                txtType.setText(model.getValueAt(row, 3).toString());
+            }
+        });
+
+        // ================= ACTIONS =================
+        btnSave.addActionListener(e -> saveTax());
+        btnUpdate.addActionListener(e -> updateTax());
+        btnDelete.addActionListener(e -> deleteTax());
+
+        setVisible(true);
+    }
+
+    // ================= LOAD =================
+    private void loadTable() {
+
+        model.setRowCount(0);
+
+        try {
+
+            AllowanceDAO dao = new AllowanceDAO();
+            ResultSet rs = dao.getAllTaxes();
+
+            while (rs.next()) {
+
+                model.addRow(new Object[]{
+                        rs.getString("emp_type"),
+                        rs.getString("tax_name"),
+                        rs.getDouble("tax_per"),
+                        rs.getString("tax_type")
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ================= SAVE =================
+    private void saveTax() {
+
+        try {
+
+            AllowanceDAO dao = new AllowanceDAO();
+
+            dao.addTax(
+                    txtEmpType.getText(),
+                    txtTaxName.getText(),
+                    Double.parseDouble(txtTaxPer.getText()),
+                    txtType.getText()
+            );
+
+            loadTable();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error in input");
+        }
+    }
+
+    // ================= UPDATE =================
+    private void updateTax() {
+
+        try {
+
+            AllowanceDAO dao = new AllowanceDAO();
+
+            dao.updateTaxPer(
+                    txtTaxName.getText(),
+                    Double.parseDouble(txtTaxPer.getText())
+            );
+
+            loadTable();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Update Error");
+        }
+    }
+
+    // ================= DELETE =================
+    private void deleteTax() {
+
+        AllowanceDAO dao = new AllowanceDAO();
+        dao.deleteTax(txtTaxName.getText());
+
+        loadTable();
+    }
+
+    public static void main(String[] args) {
+        new Payrollcalc();
+    }
+}

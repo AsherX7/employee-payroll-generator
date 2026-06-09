@@ -1,25 +1,25 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+
 public class AllowanceDAO {
 
     Connection conn = DBConnection.getConnection();
 
-    // FOR ADDING ALLOWANCES TO THE TABLE
-    public void addAllowance(String i, String allowanceName, double amount) {
+    // =========================
+    // EMPLOYEE ALLOWANCE PART
+    // =========================
 
-        String sql = "INSERT INTO employee_allowances "
-                   + "(emp_id, allowance_name, amount) "
-                   + "VALUES (?, ?, ?)";
+    public void addAllowance(String empId, String allowanceName, double amount) {
 
         try {
+
+            String sql = "INSERT INTO employee_allowances (emp_id, allowance_name, amount) VALUES (?, ?, ?)";
+
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setString(1, i);
+            ps.setString(1, empId);
             ps.setString(2, allowanceName);
             ps.setDouble(3, amount);
 
@@ -30,14 +30,12 @@ public class AllowanceDAO {
         }
     }
 
-    // FOR UPDATING TABLE
     public void updateAllowance(String empId, String allowanceName, double amount) {
 
-        String sql = "UPDATE employee_allowances "
-                   + "SET allowance_name=?, amount=? "
-                   + "WHERE emp_id=?";
-
         try {
+
+            String sql = "UPDATE employee_allowances SET allowance_name=?, amount=? WHERE emp_id=?";
+
             PreparedStatement ps = conn.prepareStatement(sql);
 
             ps.setString(1, allowanceName);
@@ -51,17 +49,13 @@ public class AllowanceDAO {
         }
     }
 
-    // TO GET TOTAL ALLOWANCE FOR AN EMPLOYEE
     public double getTotalAllowance(String empId) {
 
-        String sql =
-            "SELECT SUM(amount) AS total " +
-            "FROM employee_allowances " +
-            "WHERE emp_id = ?";
-
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
 
+            String sql = "SELECT SUM(amount) AS total FROM employee_allowances WHERE emp_id=?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, empId);
 
             ResultSet rs = ps.executeQuery();
@@ -74,63 +68,9 @@ public class AllowanceDAO {
             e.printStackTrace();
         }
 
-        return 0.0;
+        return 0;
     }
 
-    // GET TAX PERCENTAGE
-    public double getTaxPercentage(String taxName, String empType) {
-
-        String sql =
-            "SELECT tax_per " +
-            "FROM payroll " +
-            "WHERE tax_name = ? AND emp_type = ?";
-
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            ps.setString(1, taxName);
-            ps.setString(2, empType);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return rs.getDouble("tax_per");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return 0.0;
-    }
-    // to update tax percentage in payroll table
-    public boolean updateTaxPer(
-            String taxName,
-            double percentage) {
-
-        try {
-
-            String sql =
-                "UPDATE payroll SET tax_per=? WHERE tax_name=?";
-
-            PreparedStatement ps =
-                conn.prepareStatement(sql);
-
-            ps.setDouble(1, percentage);
-            ps.setString(2, taxName);
-
-            int rows = ps.executeUpdate();
-
-            return rows > 0;
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-    
-    // used in allowanceframe
     public ArrayList<String[]> getAllowances(String empId) {
 
         ArrayList<String[]> list = new ArrayList<>();
@@ -138,6 +78,7 @@ public class AllowanceDAO {
         try {
 
             String sql = "SELECT allowance_name, amount FROM employee_allowances WHERE emp_id=?";
+
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, empId);
 
@@ -146,8 +87,8 @@ public class AllowanceDAO {
             while (rs.next()) {
 
                 list.add(new String[] {
-                    rs.getString("allowance_name"),
-                    String.valueOf(rs.getDouble("amount"))
+                        rs.getString("allowance_name"),
+                        String.valueOf(rs.getDouble("amount"))
                 });
             }
 
@@ -157,14 +98,15 @@ public class AllowanceDAO {
 
         return list;
     }
-    
-    //exist
+
     public boolean exists(String empId, String allowanceName) {
 
         try {
+
             String sql = "SELECT * FROM employee_allowances WHERE emp_id=? AND allowance_name=?";
 
             PreparedStatement ps = conn.prepareStatement(sql);
+
             ps.setString(1, empId);
             ps.setString(2, allowanceName);
 
@@ -177,5 +119,109 @@ public class AllowanceDAO {
         }
 
         return false;
+    }
+
+    // =========================
+    // PAYROLL TAX PART
+    // =========================
+
+    public void addTax(String empType, String taxName, double taxPer, String taxType) {
+
+        try {
+
+            String sql = "INSERT INTO payroll (emp_type, tax_name, tax_per, tax_type) VALUES (?, ?, ?, ?)";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, empType);
+            ps.setString(2, taxName);
+            ps.setDouble(3, taxPer);
+            ps.setString(4, taxType);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean updateTaxPer(String taxName, double percentage) {
+
+        try {
+
+            String sql = "UPDATE payroll SET tax_per=? WHERE tax_name=?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setDouble(1, percentage);
+            ps.setString(2, taxName);
+
+            int rows = ps.executeUpdate();
+
+            return rows > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public void deleteTax(String taxName) {
+
+        try {
+
+            String sql = "DELETE FROM payroll WHERE tax_name=?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, taxName);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public double getTaxPercentage(String taxName, String empType) {
+
+        try {
+
+            String sql = "SELECT tax_per FROM payroll WHERE tax_name=? AND emp_type=?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, taxName);
+            ps.setString(2, empType);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("tax_per");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public ResultSet getAllTaxes() {
+
+        try {
+
+            String sql = "SELECT * FROM payroll";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            return ps.executeQuery();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
