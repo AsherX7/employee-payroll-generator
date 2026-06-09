@@ -24,7 +24,6 @@ public class HomeFrame extends JFrame {
     add(contentPanel, BorderLayout.CENTER);
 
     showDashboard();
-
     setVisible(true);
 }  
 
@@ -43,7 +42,7 @@ public JPanel createTopPanel() {
     logo.setForeground(Color.WHITE);
     logo.setFont(new Font("Segoe UI", Font.BOLD, 32));
 
-    JLabel company = new JLabel("ABC Technologies Pvt. Ltd.");
+    JLabel company = new JLabel("EMPLOYEE PAYROLL MANAGEMENT SYSTEM");
     company.setForeground(Color.WHITE);
     company.setFont(new Font("Segoe UI", Font.BOLD, 24));
 
@@ -89,15 +88,11 @@ public JPanel createSidePanel() {
     JButton payrollBtn =
             createMenuButton("Payroll Calculation");
 
-    JButton reportBtn =
-            createMenuButton("Report");
-
+ 
     JButton generatorBtn =
             createMenuButton("Payroll Generator");
 
-    JButton logoutBtn =
-            createMenuButton("Logout");
-
+   
     dashboardBtn.addActionListener(e -> showDashboard());
     empBtn.addActionListener(e -> showModifyEmp());
     payrollBtn.addActionListener(e -> showPayrollcalc());
@@ -112,16 +107,11 @@ public JPanel createSidePanel() {
     sidePanel.add(payrollBtn);
     sidePanel.add(Box.createVerticalStrut(15));
 
-    sidePanel.add(reportBtn);
-    sidePanel.add(Box.createVerticalStrut(15));
-
-    sidePanel.add(generatorBtn);
+     sidePanel.add(generatorBtn);
 
     sidePanel.add(Box.createVerticalGlue());
 
-    sidePanel.add(logoutBtn);
-
-    return sidePanel;
+      return sidePanel;
 }
 private JButton createMenuButton(String text) {
 
