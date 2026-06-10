@@ -71,14 +71,16 @@ VALUES
 CREATE TABLE employee_login (
     employeeid VARCHAR(10) PRIMARY KEY,
     password VARCHAR(100) NOT NULL,
-    FOREIGN KEY (employeeid) REFERENCES employee(employeeid)
+    company_id INT NOT NULL,
+    FOREIGN KEY (employeeid) REFERENCES employee(employeeid),
+    FOREIGN KEY (company_id) REFERENCES company(company_id)
 );
 INSERT INTO employee_login VALUES
-('E01','1234'),
-('E02','1111'),
-('E03','2222'),
-('E04','3333'),
-('E05','4444');
+('E01','1234',1),
+('E02','1111',2),
+('E03','2222',1),
+('E04','3333',2),
+('E05','4444',1);
 
 // database5
 
