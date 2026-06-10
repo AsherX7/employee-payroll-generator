@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import dao.AllowanceDAO;
 
 public class Payrollcalc extends JFrame {
-
+	private static final long serialVersionUID = 1L;
     private JTextField txtEmpType;
     private JTextField txtTaxName;
     private JTextField txtTaxPer;
