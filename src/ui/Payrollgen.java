@@ -5,8 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 import dao.EmployeeDAO;
 import model.Employee;
-import service.PayrollService;
 import utils.Validation;
+
 
 public class Payrollgen extends JFrame {
 
@@ -109,25 +109,60 @@ public class Payrollgen extends JFrame {
             }
             
             
-            PayrollService payrollService = new PayrollService();
 
-            double netSalary =
-                    payrollService.calculateNetSalary(emp);
+            double basicSalary = emp.getSalary();
 
-            String payslip =
-                    "=====================================\n" +
-                    "          EMPLOYEE PAYSLIP\n" +
-                    "=====================================\n" +
-                    "Employee ID   : " + emp.getEmpId() + "\n" +
-                    "Employee Name : " + emp.getName() + "\n" +
-                    "Employee Type : " + emp.getEmpType() + "\n" +
-                    "-------------------------------------\n" +
-                    "Basic Salary  : ₹" +
-                    String.format("%.2f", emp.getSalary()) + "\n" +
-                    "-------------------------------------\n" +
-                    "Net Salary    : ₹" +
-                    String.format("%.2f", netSalary) + "\n" +
-                    "=====================================";
+         // Allowances
+         double hra = basicSalary * 0.40;
+         double ta  = basicSalary * 0.10;
+         double ma  = basicSalary * 0.05;
+
+         double totalAllowances = hra + ta + ma;
+
+         double grossSalary = basicSalary + totalAllowances;
+
+         // Deductions
+         double pf  = basicSalary * 0.12;
+         double esi = grossSalary * 0.0075;
+         double tds = basicSalary * 0.08;
+         double pt  = 200;
+
+         double totalDeductions =
+                 pf + esi + tds + pt;
+
+         double netSalary =
+                 grossSalary - totalDeductions;
+
+         String payslip =
+        		 "=====================================\n" +
+        		 "         EMPLOYEE PAYSLIP\n" +
+        		 "=====================================\n" +
+        		 "Employee ID   : " + emp.getEmpId() + "\n" +
+        		 "Employee Name : " + emp.getName() + "\n" +
+        		 "Employee Type : " + emp.getEmpType() + "\n" +
+        		 "=====================================\n" +
+
+        		 "EARNINGS\n" +
+        		 "-------------------------------------\n" +
+        		 "Basic Salary        : ₹" + String.format("%.2f", basicSalary) + "\n" +
+        		 "HRA (40%)           : ₹" + String.format("%.2f", hra) + "\n" +
+        		 "Transport (10%)     : ₹" + String.format("%.2f", ta) + "\n" +
+        		 "Medical (5%)        : ₹" + String.format("%.2f", ma) + "\n" +
+        		 "-------------------------------------\n" +
+        		 "Gross Salary        : ₹" + String.format("%.2f", grossSalary) + "\n" +
+
+        		 "\nDEDUCTIONS\n" +
+        		 "-------------------------------------\n" +
+        		 "PF (12%)            : ₹" + String.format("%.2f", pf) + "\n" +
+        		 "ESI (0.75%)         : ₹" + String.format("%.2f", esi) + "\n" +
+        		 "TDS (8%)            : ₹" + String.format("%.2f", tds) + "\n" +
+        		 "Professional Tax    : ₹" + String.format("%.2f", pt) + "\n" +
+        		 "-------------------------------------\n" +
+        		 "Total Deductions    : ₹" + String.format("%.2f", totalDeductions) + "\n" +
+
+        		 "\n=====================================\n" +
+        		 "NET SALARY          : ₹" + String.format("%.2f", netSalary) + "\n" +
+        		 "=====================================";
             
             outputArea.setText(payslip);
     } 
@@ -146,5 +181,4 @@ public class Payrollgen extends JFrame {
         new Payrollgen();
     }
 }
-
 
