@@ -6,8 +6,9 @@ import java.awt.*;
 import java.sql.ResultSet;
 import dao.AllowanceDAO;
 
-public class Payrollcalc extends JFrame {
-	private static final long serialVersionUID = 1L;
+public class Payrollcalc extends JPanel {
+    private static final long serialVersionUID = 1L;
+
     private JTextField txtEmpType;
     private JTextField txtTaxName;
     private JTextField txtTaxPer;
@@ -20,15 +21,11 @@ public class Payrollcalc extends JFrame {
 
     public Payrollcalc() {
 
-        setTitle("Payroll Calculation");
-        setSize(1000, 600);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
+        setBackground(new Color(245, 248, 255));
+        setPreferredSize(new Dimension(1000, 600));
 
-        getContentPane().setBackground(new Color(245, 248, 255));
-
-        // ================= NAVY TITLE BAR =================
+        // ================= TITLE BAR =================
         JPanel titleBar = new JPanel();
         titleBar.setBounds(0, 0, 1000, 60);
         titleBar.setBackground(new Color(4, 24, 82));
@@ -97,11 +94,11 @@ public class Payrollcalc extends JFrame {
 
         // ================= TABLE =================
         String[] cols = {"Employee Type", "Tax Name", "Percentage", "Type"};
+
         model = new DefaultTableModel(cols, 0);
 
         table = new JTable(model);
 
-        // ⭐ NAVY HEADER STYLE
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         table.getTableHeader().setBackground(new Color(4, 24, 82));
         table.getTableHeader().setForeground(Color.WHITE);
@@ -131,15 +128,13 @@ public class Payrollcalc extends JFrame {
             }
         });
 
-        // ================= ACTIONS =================
+        // ================= BUTTON ACTIONS =================
         btnSave.addActionListener(e -> saveTax());
         btnUpdate.addActionListener(e -> updateTax());
         btnDelete.addActionListener(e -> deleteTax());
-
-        setVisible(true);
     }
 
-    // ================= LOAD =================
+    // ================= LOAD TABLE =================
     private void loadTable() {
 
         model.setRowCount(0);
@@ -180,8 +175,11 @@ public class Payrollcalc extends JFrame {
 
             loadTable();
 
+            JOptionPane.showMessageDialog(this, "Tax Saved Successfully");
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error in input");
+
+            JOptionPane.showMessageDialog(this, "Error in Input");
         }
     }
 
@@ -199,7 +197,10 @@ public class Payrollcalc extends JFrame {
 
             loadTable();
 
+            JOptionPane.showMessageDialog(this, "Tax Updated Successfully");
+
         } catch (Exception e) {
+
             JOptionPane.showMessageDialog(this, "Update Error");
         }
     }
@@ -207,13 +208,20 @@ public class Payrollcalc extends JFrame {
     // ================= DELETE =================
     private void deleteTax() {
 
-        AllowanceDAO dao = new AllowanceDAO();
-        dao.deleteTax(txtTaxName.getText());
+        try {
 
-        loadTable();
+            AllowanceDAO dao = new AllowanceDAO();
+
+            dao.deleteTax(txtTaxName.getText());
+
+            loadTable();
+
+            JOptionPane.showMessageDialog(this, "Tax Deleted Successfully");
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(this, "Delete Error");
+        }
     }
 
-    public static void main(String[] args) {
-        new Payrollcalc();
-    }
 }

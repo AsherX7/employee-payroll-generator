@@ -15,7 +15,7 @@ public class DBConnection {
                 "jdbc:mysql://localhost:3306/payroll_schema",
                 "root",
 
-                 "MySQLROOT@123as"
+                 "ngelsql"
 
             );
 
