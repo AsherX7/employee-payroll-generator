@@ -14,7 +14,9 @@ public class DBConnection {
             con = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/payroll_schema",
                 "root",
-                "ngelsql"
+
+                 "MySQLROOT@123as"
+
             );
 
             System.out.println("Connected!");
@@ -25,4 +27,6 @@ public class DBConnection {
 
         return con;
     }
+
 }
+
