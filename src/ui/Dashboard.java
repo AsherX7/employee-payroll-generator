@@ -29,8 +29,6 @@ public class Dashboard extends JPanel {
 
     // ── Fonts ──────────────────────────────────────────────────────────────────
     private static final Font FONT_TITLE   = new Font("Segoe UI", Font.BOLD,  22);
-    private static final Font FONT_CARD_V  = new Font("Segoe UI", Font.BOLD,  26);
-    private static final Font FONT_CARD_T  = new Font("Segoe UI", Font.PLAIN, 11);
     private static final Font FONT_SECTION = new Font("Segoe UI", Font.BOLD,  14);
     private static final Font FONT_BODY    = new Font("Segoe UI", Font.PLAIN, 12);
     private static final Font FONT_SMALL   = new Font("Segoe UI", Font.PLAIN, 11);
@@ -582,6 +580,7 @@ public class Dashboard extends JPanel {
     //  PIE CHART PANEL
     // ══════════════════════════════════════════════════════════════════════════
     static class PieChartPanel extends JPanel {
+    	private static final long serialVersionUID = 1L;
         private java.util.LinkedHashMap<String, Integer> data;
 
         PieChartPanel(java.util.LinkedHashMap<String, Integer> data) {

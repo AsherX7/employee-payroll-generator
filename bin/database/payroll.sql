@@ -5,7 +5,8 @@ CREATE SCHEMA `payroll_schema` ;
 //database1
 
 use payroll_schema;
-create table employee(
+
+CREATE TABLE employee(
 employeeid varchar(10) primary key,
 name varchar(20) not null,
 department varchar(25) not null,
