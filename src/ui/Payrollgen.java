@@ -8,7 +8,7 @@ import model.Employee;
 import utils.Validation;
 
 
-public class Payrollgen extends JFrame {
+public class Payrollgen extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,11 +19,7 @@ public class Payrollgen extends JFrame {
 
     public Payrollgen() {
 
-        setTitle("Payslip Generator");
-        setSize(700, 500);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
+    	setLayout(new BorderLayout(10, 10));
 
         // Components
         idField = new JTextField(15);
@@ -60,11 +56,9 @@ public class Payrollgen extends JFrame {
         backButton.addActionListener(e -> {
 
             new HomeFrame(); // Replace with your Dashboard class
-            dispose();
 
         });
-
-        setVisible(true);
+        
     }
 
     private void generatePayslip() {
