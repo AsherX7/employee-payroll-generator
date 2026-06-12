@@ -51,7 +51,9 @@ public class Payrollgen extends JPanel {
         JLabel idLabel = new JLabel("Employee ID");
         idLabel.setForeground(NAVY);
         idLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
         formPanel.add(idLabel);
+        formPanel.add(idField);
 
         // Button Panel
         JPanel buttonPanel = new JPanel();
