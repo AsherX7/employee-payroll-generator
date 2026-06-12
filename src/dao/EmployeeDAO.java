@@ -1,8 +1,11 @@
 package dao;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import model.Employee;
 
@@ -149,6 +152,48 @@ e.printStackTrace();
 		    return emp;
 		}
 		
+		//allowance
+		public List<Object[]> getAllowances(String empId) {
+		    List<Object[]> list = new ArrayList<>();
+		    String sql = "SELECT allowance_name, amount FROM employee_allowances WHERE emp_id = ?";
+		    try (Connection con = DBConnection.getConnection();
+		         PreparedStatement pst = con.prepareStatement(sql)) {
+		        pst.setString(1, empId);
+		        try (ResultSet rs = pst.executeQuery()) {
+		            while (rs.next()) {
+		                list.add(new Object[]{
+		                    rs.getString("allowance_name"),
+		                    rs.getDouble("amount")
+		                });
+		            }
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return list;
+		}
+		
+		 public double getTotalAllowance(String empId) {
+			 Connection conn = DBConnection.getConnection();
+		        try {
+
+		            String sql = "SELECT SUM(amount) AS total FROM employee_allowances WHERE emp_id=?";
+
+		            PreparedStatement ps = conn.prepareStatement(sql);
+		            ps.setString(1, empId);
+
+		            ResultSet rs = ps.executeQuery();
+
+		            if (rs.next()) {
+		                return rs.getDouble("total");
+		            }
+
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+
+		        return 0;
+		    }
 //validating login credentials
 		public boolean validateLogin(String username, String password) {
 

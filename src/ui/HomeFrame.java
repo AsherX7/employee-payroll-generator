@@ -1,18 +1,26 @@
 package ui;
 
 import javax.swing.*;
+
+
+
 import java.awt.*;
 
 public class HomeFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
+    private static final Font FONT_BRAND  = new Font("Segoe UI", Font.BOLD,  28);
+
 	 private JPanel contentPanel;
-	    public HomeFrame() {
+	 private int companyId;   
 
-    setTitle("PAYTRACK");
-    setSize(1550, 850);
+	    public HomeFrame(int companyId) {   
+	        this.companyId = companyId;    
+
+	    	setTitle("PAYTRACK");   	
+           setSize(1550, 850);
     setLocationRelativeTo(null);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
     setLayout(new BorderLayout());
 
     add(createTopPanel(), BorderLayout.NORTH);
@@ -26,6 +34,7 @@ public class HomeFrame extends JFrame {
     showDashboard();
     setVisible(true);
 }  
+	    //top panel
 
 public JPanel createTopPanel() {
 
@@ -33,20 +42,27 @@ public JPanel createTopPanel() {
 
     topPanel.setBackground(new Color(4, 24, 82));
     topPanel.setPreferredSize(new Dimension(0, 90));
+ // Gold strip just below top panel
+    JPanel goldLine = new JPanel();
+    goldLine.setBackground(new Color(255, 193, 7));
+    goldLine.setBounds(280, 90, 1290, 4); // x, y, width, height
+  add(goldLine);
 
     // LEFT
     JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,20));
     leftPanel.setOpaque(false);
 
-    JLabel logo = new JLabel("PAYTRACK");
-    logo.setForeground(Color.WHITE);
-    logo.setFont(new Font("Segoe UI", Font.BOLD, 32));
+           JLabel brandLbl = new JLabel(
+        "<html><span style='color:#FFFFFF'>PAY</span>"
+      + "<span style='color:#FFC107'>TRACK</span></html>");
+    brandLbl.setFont(FONT_BRAND);
+    brandLbl.setBounds(24, 14, 200, 36);
 
     JLabel company = new JLabel("EMPLOYEE PAYROLL MANAGEMENT SYSTEM");
     company.setForeground(Color.WHITE);
     company.setFont(new Font("Segoe UI", Font.BOLD, 24));
-
-    leftPanel.add(logo);
+    
+    leftPanel.add(brandLbl);
     leftPanel.add(new JSeparator(SwingConstants.VERTICAL));
     leftPanel.add(company);
 
@@ -55,7 +71,18 @@ public JPanel createTopPanel() {
     rightPanel.setOpaque(false);
 
     JButton adminBtn = new JButton("Admin");
-    JButton logoutBtn = new JButton("Logout");
+    adminBtn.setBackground(new Color(15, 35, 70));//navy blue
+    adminBtn.setForeground(new Color(240, 240, 240));
+    adminBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        
+    JButton logoutBtn = new JButton("x Logout");
+    logoutBtn.setBackground(new Color(240, 240, 240));
+    logoutBtn.setForeground(new Color(15, 35, 70));//navy blue
+    logoutBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+    logoutBtn.addActionListener(e -> {
+        dispose();
+        new LoginFrame().setVisible(true);
+    });    
 
     adminBtn.setFocusPainted(false);
     logoutBtn.setFocusPainted(false);
@@ -136,7 +163,7 @@ private JButton createMenuButton(String text) {
 
             public void showDashboard() {
                 contentPanel.removeAll();
-                contentPanel.add(new Dashboard());
+                contentPanel.add(new Dashboard(companyId));
                 contentPanel.revalidate();
                 contentPanel.repaint();
             }
@@ -163,7 +190,7 @@ private JButton createMenuButton(String text) {
         
 public static void main(String[] args) {
 
-    new HomeFrame();
+    new HomeFrame(2);
 
 
 }}

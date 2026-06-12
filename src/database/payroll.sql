@@ -68,7 +68,7 @@ VALUES
 ('E04','TA',800);
 
 // database4
-
+use payroll_schema;
 CREATE TABLE employee_login (
     employeeid VARCHAR(10) PRIMARY KEY,
     password VARCHAR(100) NOT NULL,

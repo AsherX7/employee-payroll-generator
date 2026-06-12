@@ -8,7 +8,7 @@ import model.Employee;
 import utils.Validation;
 
 
-public class Payrollgen extends JPanel {
+public class Payrollgen extends JPanel { {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,7 +19,7 @@ public class Payrollgen extends JPanel {
 
     public Payrollgen() {
 
-    	setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout(10, 10));
 
         // Components
         idField = new JTextField(15);
@@ -55,10 +55,12 @@ public class Payrollgen extends JPanel {
         // Back Button
         backButton.addActionListener(e -> {
 
-            new HomeFrame(); // Replace with your Dashboard class
+        	JOptionPane.showMessageDialog(this, "Use the side menu to navigate.");
+            
 
         });
-        
+
+        setVisible(true);
     }
 
     private void generatePayslip() {
@@ -175,4 +177,5 @@ public class Payrollgen extends JPanel {
         new Payrollgen();
     }
 }
+
 
