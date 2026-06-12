@@ -65,3 +65,34 @@ VALUES
 ('E03','MA',1000),
 ('E04','MA',1000),
 ('E04','TA',800);
+
+// database4
+use payroll_schema;
+CREATE TABLE employee_login (
+    employeeid VARCHAR(10) PRIMARY KEY,
+    password VARCHAR(100) NOT NULL,
+    company_id INT NOT NULL,
+    FOREIGN KEY (employeeid) REFERENCES employee(employeeid),
+    FOREIGN KEY (company_id) REFERENCES company(company_id)
+);
+INSERT INTO employee_login VALUES
+('E01','1234',1),
+('E02','1111',2),
+('E03','2222',1),
+('E04','3333',2),
+('E05','4444',1);
+
+// database5
+
+use payroll_schema;
+CREATE TABLE company (
+    company_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(100),
+    email VARCHAR(100),
+    password VARCHAR(100)
+);
+
+INSERT INTO company (company_name, email, password)
+VALUES
+('PayTrack Pvt Ltd','admin@pay.com','admin123'),
+('ABC Tech','abc@tech.com','abc123');

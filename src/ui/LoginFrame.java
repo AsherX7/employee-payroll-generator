@@ -10,13 +10,32 @@ import java.awt.event.*;
 public class LoginFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
+    // ── Palette ────────────────────────────────────
+    private static final Color NAVY        = new Color(15,  35,  70);
+    private static final Color NAVY_LIGHT  = new Color(35,  70, 140);
+    private static final Color ACCENT_GOLD = new Color(255, 193,   7);
+    private static final Color WHITE       = Color.WHITE;
+    private static final Color BG_FORM     = new Color(245, 247, 252);
+    private static final Color BORDER_CLR  = new Color(200, 210, 230);
+    private static final Color TEXT_HINT   = new Color(160, 175, 200);
+    private static final Color TEXT_DARK   = new Color(25,  40,  75);
+    private static final Color ERROR_RED   = new Color(185, 50,  40);
+
+    // ── Fonts ──────────────────────────────────────────────────────────────────
+    private static final Font FONT_FIELD  = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final Font FONT_BTN    = new Font("Segoe UI", Font.BOLD,  13);
+    private static final Font FONT_LINK   = new Font("Segoe UI", Font.PLAIN, 12);
+    private static final Font FONT_SMALL  = new Font("Segoe UI", Font.PLAIN, 10);
+
+    // ── State ──────────────────────────────────────────────────────────
     private JPanel overlayPanel;
     private boolean companyMode = false;
     private JLabel boyLabel;
     private JLayeredPane layeredPane;
     private CardLayout companyCardLayout;
     private JPanel companyCardPanel;
-
+ 
+//===============================================
     public LoginFrame() {
 
         setTitle("PayTrack Login");
@@ -27,13 +46,15 @@ public class LoginFrame extends JFrame {
 
         layeredPane = new JLayeredPane();
         layeredPane.setLayout(null);
+        layeredPane.setBackground(BG_FORM);
 
+        // Left form — Employee
         JPanel employeePanel = createEmployeePanel();
         employeePanel.setBounds(0, 0, 450, 550);
-
+        // Right form — Company (login + signup via CardLayout)
         JPanel companyPanel = createCompanyContainer();
         companyPanel.setBounds(450, 0, 450, 550);
-
+        // Overlay — navy sliding panel
         overlayPanel = createOverlayPanel();
         overlayPanel.setBounds(0, 0, 450, 550);
 
@@ -50,9 +71,15 @@ public class LoginFrame extends JFrame {
     }
 
     //--------------- EMPLOYEE SIDE PANEL---------------------------------
+    //==============================================
     private JPanel createEmployeePanel() {
         JPanel panel = new JPanel(null);
         panel.setBackground(Color.WHITE);
+     // gold stripe 
+        JPanel goldLine = new JPanel();
+        goldLine.setBackground(ACCENT_GOLD);
+        goldLine.setBounds(0, 0, 450, 3);
+       panel.add(goldLine);
 
         // Employee Icon
         ImageIcon empIcon = new ImageIcon("images/employeeicon.png");
@@ -67,7 +94,12 @@ public class LoginFrame extends JFrame {
         title.setForeground(new Color(25, 42, 86));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setBounds(75, 115, 300, 40);
-
+        //subtitle
+        JLabel subtitle = new JLabel("Login to view your payslip");
+        subtitle.setFont(FONT_SMALL);
+        subtitle.setForeground(new Color(130, 150, 190));
+        subtitle.setBounds(170, 135, 300, 40);
+        panel.add(subtitle);
         // Username Label
         JLabel lblUser = new JLabel("EmployeeID");
         lblUser.setBounds(100, 170, 100, 20);
@@ -109,11 +141,11 @@ public class LoginFrame extends JFrame {
         
         // Password Label
         JLabel lblPass = new JLabel("Password");
-        lblPass.setBounds(100, 255, 100, 20);
+        lblPass.setBounds(100, 250, 100, 20);
 
         // Password Field
         JPasswordField passField = new JPasswordField();
-        passField.setBounds(140, 280, 210, 40);
+        passField.setBounds(140, 270, 210, 40);
         passField.setMargin(new Insets(0,10,0,10));
         passField.setEchoChar((char)0);
         passField.setText("Enter password");
@@ -124,7 +156,7 @@ public class LoginFrame extends JFrame {
                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
         JLabel lockIconLbl = new JLabel(new ImageIcon(lockImg));
-        lockIconLbl.setBounds(110, 290, 20, 20);
+        lockIconLbl.setBounds(110, 280, 20, 20);
 
         panel.add(lockIconLbl);
 
@@ -153,75 +185,99 @@ public class LoginFrame extends JFrame {
                 }
             }
         });
-        //company mail id
+
+        // ── Show / Hide password toggle ───────────────────────────────────────
+        JCheckBox showPass = new JCheckBox("Show password");
+        showPass.setFont(FONT_SMALL);
+        showPass.setForeground(Color.black);
+        showPass.setBackground(WHITE);
+        showPass.setFocusPainted(false);
+        showPass.setBounds(120, 320, 10, 10);  // sits between pass and company fields
+        showPass.addActionListener(e -> {
+            passField.setEchoChar(showPass.isSelected() ? (char) 0 : '•');
+        });
+        panel.add(showPass);
+
+        // company id label
+        JLabel lblid = new JLabel("CompanyID");
+        lblid.setBounds(100, 330, 100, 20);
+     // Company_id Field
         JTextField mailField = new JTextField();
-        mailField.setBounds(140, 365, 210, 40);
+        mailField.setBounds(140, 355, 210, 40);
         mailField.setMargin(new Insets(0,10,0,10));
 
-        mailField.setText("Enter Company mail id");
+        mailField.setText("Enter Company ID");
         mailField.setForeground(Color.GRAY);
         mailField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (userField.getText().equals("Enter Company mail id")) {
-                    userField.setText("");
-                    userField.setForeground(Color.BLACK);
+                if (mailField.getText().equals("Enter Company ID")) {
+                    mailField.setText("");
+                   mailField.setForeground(Color.BLACK);
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (userField.getText().trim().isEmpty()) {
-                    userField.setText("Enter Company mail id");
-                    userField.setForeground(Color.GRAY);
+                if (mailField.getText().trim().isEmpty()) {
+                    mailField.setText("Enter Company ID");
+                    mailField.setForeground(Color.GRAY);
                 }
             }
-        });
+        });   
         // Login Button
         JButton loginBtn = new JButton("LOGIN");
-        loginBtn.setBounds(125, 350, 200, 45);
-
+        loginBtn.setBounds(165, 420, 140, 35);
         loginBtn.setBackground(new Color(15, 35, 70));
         loginBtn.setForeground(Color.WHITE);
         loginBtn.setFont(new Font("Segoe UI", Font.BOLD, 16));
         loginBtn.setFocusPainted(false);
-
+     // ── Error label ───────────────────────────────────────────────────────
+        JLabel errLabel = new JLabel(" ");
+        errLabel.setFont(FONT_SMALL);
+        errLabel.setForeground(ERROR_RED);
+        errLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        errLabel.setBounds(165, 435, 140, 16);
+        panel.add(errLabel);
         loginBtn.addActionListener(e -> {
-
-            String username = userField.getText();
+            String empId    = userField.getText().trim();
             String password = String.valueOf(passField.getPassword());
+            String cmpId    = mailField.getText().trim();
+
+            if (empId.isEmpty() || empId.equals("Enter your Employee ID")) {
+                flashError(errLabel, "Please enter your Employee ID."); return;
+            }
+            if (password.isEmpty() || password.equals("Enter your password")) {
+                flashError(errLabel, "Please enter your password."); return;
+            }
+            if (cmpId.isEmpty() || cmpId.equals("Enter your Company ID")) {
+                flashError(errLabel, "Please enter your Company ID."); return;
+            }
 
             EmployeeDAO dao = new EmployeeDAO();
-
-            if (dao.validateLogin(username, password)) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Login Successful");
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Employee Login: " + userField.getText());
+            if (dao.validateLogin(empId, password)) {
+                errLabel.setText(" ");
+                //new EmployeeDashboard(empId);
                 dispose();
-                new EmployeeDashboard().setVisible(true);
-
             } else {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Invalid Username or Password");
+                flashError(errLabel, "Invalid Employee ID or password.");
             }
         });
+     
         panel.add(empLabel);
         panel.add(title);
         panel.add(lblUser);
+        panel.add(lblid);
         panel.add(userField);
         panel.add(lblPass);
         panel.add(passField);
+        panel.add(mailField);
         panel.add(loginBtn);
 
         return panel;
     }
     // -----------------COMPANY SIDE PANEL--------------------------------
+    //====================================================
     private JPanel createCompanyContainer() {
 
         companyCardLayout = new CardLayout();
@@ -236,70 +292,92 @@ public class LoginFrame extends JFrame {
     private JPanel createCompanyLoginPanel() {
 
         JPanel panel = new JPanel(null);//PANEL
-        panel.setBackground(new Color(245, 245, 245));
-
+        panel.setBackground(BG_FORM);
+//gold line
+        JPanel goldLine = new JPanel();
+        goldLine.setBackground(ACCENT_GOLD);
+        goldLine.setBounds(0, 0, 450, 3);
+        panel.add(goldLine);
+   //title     
         JLabel title = new JLabel("Company Login");//TITLE
         title.setFont(new Font("Arial", Font.BOLD, 28));
         title.setBounds(120, 80, 250, 35);
+//subtitle
+        JLabel subtitle = new JLabel("Access your company payroll portal");
+        subtitle.setFont(FONT_SMALL);
+        subtitle.setForeground(new Color(130, 150, 190));
+        subtitle.setBounds(135, 115, 300, 16);
+        panel.add(subtitle);
+       
+        JLabel lblUser = styledLabel("User ID");
+        lblUser.setBounds(100, 155, 100, 20);
+        panel.add(lblUser);
 
-        JTextField userField = new JTextField();
+        JTextField userField = styledField("Enter Company User ID");
         userField.setBounds(100, 180, 250, 35);
+        panel.add(userField);
 
-        JPasswordField passField = new JPasswordField();
+        JLabel lblPass = styledLabel("Password");
+        lblPass.setBounds(100, 218, 100, 20);
+        panel.add(lblPass);
+
+        JPasswordField passField = styledPassField("Enter your password");
         passField.setBounds(100, 240, 250, 35);
+        panel.add(passField);
 
-        JButton loginBtn = new JButton("Login");//LOGINBUTTON
+        JButton loginBtn = primaryButton("Login →", NAVY, ACCENT_GOLD);
         loginBtn.setBounds(165, 310, 140, 35);
-        loginBtn.setBackground(new Color(240, 240, 240));
-        loginBtn.setForeground(new Color(15, 35, 70));//navy blue
         loginBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-            
-        //company login credentials
-        loginBtn.addActionListener(e -> {
+        panel.add(loginBtn);
 
-            String company_id = userField.getText();
+        JLabel errLabel = new JLabel(" ");
+        errLabel.setFont(FONT_SMALL);
+        errLabel.setForeground(ERROR_RED);
+        errLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        errLabel.setBounds(165, 335,140, 16);
+        panel.add(errLabel);
+
+        // Divider + signup link
+        JSeparator div = new JSeparator();
+        div.setForeground(BORDER_CLR);
+        div.setBounds(88, 360,250, 1);
+        panel.add(div);
+
+        JLabel noAcc = new JLabel("Don't have an account?");
+        noAcc.setFont(FONT_SMALL);
+        noAcc.setForeground(new Color(130, 150, 190));
+        noAcc.setBounds(90, 372, 180, 18);
+        panel.add(noAcc);
+
+        JButton signupBtn = linkButton("Create one →");
+        signupBtn.setBounds(230, 370, 120, 22);
+        signupBtn.addActionListener(e -> companyCardLayout.show(companyCardPanel, "SIGNUP"));
+        panel.add(signupBtn);
+      //company login credentials
+        loginBtn.addActionListener(e -> {
+            String userId   = userField.getText().trim();
             String password = String.valueOf(passField.getPassword());
 
+            if (userId.isEmpty() || userId.equals("Enter Company User ID")) {
+                flashError(errLabel, "Please enter your User ID."); return;
+            }
+            if (password.isEmpty() || password.equals("Enter your password")) {
+                flashError(errLabel, "Please enter your password."); return;
+            }
+
             CompanyDAO dao = new CompanyDAO();
-
-            if (dao.validateLogin(company_id, password)) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Login Successful");
-                JOptionPane.showMessageDialog(this,
-                        "Company Login: " + userField.getText());
-
+            if (dao.validateLogin(userId, password)) {
+                errLabel.setText(" ");
                 dispose();
-                new HomeFrame().setVisible(true);
-
+                new HomeFrame(Integer.parseInt(userId)).setVisible(true);
             } else {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Invalid UserID or Password");
+                flashError(errLabel, "Invalid User ID or password.");
             }
         });
 
-
-        JButton signupBtn = new JButton("Create Account");//CREATE ACC BUTTON
-        signupBtn.setBounds(165, 360, 140, 38);
-        signupBtn.setBackground(new Color(15, 35, 70));//navy blue
-        signupBtn.setForeground(Color.WHITE);
-        signupBtn.addActionListener(e ->
-                companyCardLayout.show(companyCardPanel, "SIGNUP"));
-
-        panel.add(title);
-
-        panel.add(new JLabel("UserID")).setBounds(100, 155, 100, 20);
-        panel.add(userField);
-
-        panel.add(new JLabel("Password")).setBounds(100, 215, 100, 20);
-        panel.add(passField);
-
         panel.add(loginBtn);
         panel.add(signupBtn);
-
+        panel.add(title);
         return panel;
     }
     //----------------------COMPANY SIGNUP---------------------------------------
@@ -307,25 +385,49 @@ public class LoginFrame extends JFrame {
     private JPanel createCompanySignupPanel() {
 
         JPanel panel = new JPanel(null);
-        panel.setBackground(new Color(245, 245, 245));
+        panel.setBackground(BG_FORM);
+//title
+        JLabel title = new JLabel("Create Company Account");
+        title.setFont(new Font("Arial", Font.BOLD, 24));
+        title.setBounds(70, 40, 300, 35);
+//subtitle
+        JLabel subtitle = new JLabel("Register your organisation on PayTrack");
+        subtitle.setFont(FONT_SMALL);
+        subtitle.setForeground(new Color(130, 150, 190));
+        subtitle.setBounds(150, 60, 300, 35);
+             
+         JLabel lblName = styledLabel("Company Name");
+        lblName.setBounds(100, 100, 150, 20);
+        panel.add(lblName);
 
-        JLabel title = new JLabel("Company Sign Up");
-        title.setFont(new Font("Arial", Font.BOLD, 28));
-        title.setBounds(100, 40, 300, 35);
-
-        JTextField companyField = new JTextField();
-        JTextField emailField = new JTextField();
-        JPasswordField passField = new JPasswordField();
-
-        panel.add(new JLabel("Company Name")).setBounds(100, 100, 150, 20);
+        JTextField companyField = styledField("Your organisation name");
         companyField.setBounds(100, 125, 250, 35);
+        panel.add(companyField);
 
-        panel.add(new JLabel("Email")).setBounds(100, 170, 150, 20);
+        JLabel lblEmail = styledLabel("Email Address");
+        lblEmail.setBounds(100, 170, 150, 20);
+        panel.add(lblEmail);
+
+        JTextField emailField = styledField("admin@company.com");
         emailField.setBounds(100, 195, 250, 35);
+        panel.add(emailField);
 
-        panel.add(new JLabel("Password")).setBounds(100, 240, 150, 20);
+        JLabel lblPass = styledLabel("Password");
+        lblPass.setBounds(100, 240, 150, 20);
+        panel.add(lblPass);
+
+        JPasswordField passField = styledPassField("Create a strong password");
         passField.setBounds(100, 265, 250, 35);
+        panel.add(passField);
 
+        JLabel lblConfirm = styledLabel("Confirm Password");
+        lblConfirm.setBounds(100, 310, 200, 18);
+        panel.add(lblConfirm);
+
+        JPasswordField confirmField = styledPassField("Re-enter your password");
+        confirmField.setBounds(100, 330, 250, 35);
+        panel.add(confirmField);
+        
         JButton registerBtn = new JButton("Register");//register
         registerBtn.setBounds(100, 390, 250, 40);
         registerBtn.setBackground(Color.WHITE);
@@ -337,43 +439,55 @@ public class LoginFrame extends JFrame {
         backBtn.setForeground(new Color(240, 240, 240));
         backBtn.setBackground(new Color(15, 35, 70));//navy blue
         backBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        backBtn.addActionListener(e -> companyCardLayout.show(companyCardPanel, "LOGIN"));
 
-        backBtn.addActionListener(e ->
-                companyCardLayout.show(companyCardPanel, "LOGIN"));
-              
+        JLabel errLabel = new JLabel(" ");
+        errLabel.setFont(FONT_SMALL);
+        errLabel.setForeground(ERROR_RED);
+        errLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        errLabel.setBounds(100, 370, 250, 16);
+        panel.add(errLabel);
+
         registerBtn.addActionListener(e -> {
+            String name     = companyField.getText().trim();
+            String email    = emailField.getText().trim();
+            String password = String.valueOf(passField.getPassword());
+            String confirm  = String.valueOf(confirmField.getPassword());
+
+            if (name.isEmpty() || name.equals("Your organisation name")) {
+                flashError(errLabel, "Company name is required."); return;
+            }
+            if (email.isEmpty() || !email.contains("@")) {
+                flashError(errLabel, "Enter a valid email address."); return;
+            }
+            if (password.length() < 6) {
+                flashError(errLabel, "Password must be at least 6 characters."); return;
+            }
+            if (!password.equals(confirm)) {
+                flashError(errLabel, "Passwords do not match."); return;
+            }
 
             CompanyDAO dao = new CompanyDAO();
-
-            String companyName = companyField.getText();
-            String email = emailField.getText();
-            String password =String.valueOf(passField.getPassword());
             if (dao.emailExists(email)) {
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Email already exists");
-
-                return;
+                flashError(errLabel, "That email is already registered."); return;
             }
 
             Company company = new Company();
-
-            company.setCompanyName(companyName);
+            company.setCompanyName(name);
             company.setEmail(email);
             company.setPassword(password);
 
             if (dao.addCompany(company)) {
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Registration Successful");
-
+                JOptionPane.showMessageDialog(this,
+                    "Account created! You can now log in.",
+                    "Registration Successful", JOptionPane.INFORMATION_MESSAGE);
+                companyField.setText("");
+                emailField.setText("");
+                passField.setText("");
+                confirmField.setText("");
+                companyCardLayout.show(companyCardPanel, "LOGIN");
             } else {
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Registration Failed");
+                flashError(errLabel, "Registration failed. Please try again.");
             }
         });
 
@@ -383,11 +497,13 @@ public class LoginFrame extends JFrame {
         panel.add(passField);
         panel.add(registerBtn);
         panel.add(backBtn);
+        panel.add(subtitle);
 
         return panel;
     }
 
     //-----------------------NAVY BLUE OVERLAY-----------------------------------
+    //================================================================
     private JPanel createOverlayPanel() {
 
         JPanel panel = new JPanel(null);
@@ -400,32 +516,53 @@ public class LoginFrame extends JFrame {
 
         JLabel logoLabel = new JLabel(new ImageIcon(logoImg));
         logoLabel.setBounds(115, 35, 220, 84);
-
-        panel.add(logoLabel);
-      
+    
 
         JLabel title = new JLabel("Welcome");
         title.setForeground(new Color(255, 193, 7)); // Gold
         title.setFont(new Font("Arial", Font.BOLD, 32));
-        title.setBounds(120, 150, 220, 40);
+        title.setBounds(120, 120, 220, 40);
         title.setHorizontalAlignment(SwingConstants.CENTER);
-
-        JLabel info = new JLabel("<html><center>please login to continue</center></html>");
+        
+        JLabel subtitle = new JLabel("Company Portal");
+        subtitle.setForeground(Color.WHITE);
+        subtitle.setFont(new Font("Arial", Font.BOLD, 20));
+        subtitle.setBounds(120, 165, 220, 40);
+        subtitle.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        JLabel info = new JLabel("<html><center style='color:#A8BEDE;line-height:160%'>"
+                + "Your payroll, always<br>accurate and on time.</center></html>");
         info.setForeground(Color.WHITE);
-        info.setFont(new Font("Arial", Font.PLAIN, 14));
-        info.setBounds(100, 200, 250, 40);
+        info.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        info.setBounds(100, 210, 250, 40);
         info.setHorizontalAlignment(SwingConstants.CENTER);
-
-        JButton switchBtn = new JButton("Employee LOGIN");
-        switchBtn.setBounds(100, 280, 250, 50);
+     // Decorative dot row
+        JLabel dots = new JLabel("· · · · ·");
+        dots.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        dots.setForeground(ACCENT_GOLD);
+        dots.setHorizontalAlignment(SwingConstants.CENTER);
+        dots.setBounds(100, 250,250, 24);
+        
+        JButton switchBtn = new JButton() {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getModel().isRollover()
+                    ? ACCENT_GOLD : new Color(25,42,86));
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        switchBtn.setText("Switch to Employee Login");
+        switchBtn.setBounds(80, 300, 300, 50);
         switchBtn.setFont(new Font("Arial", Font.BOLD, 14));
-        switchBtn.setForeground(Color.WHITE);
-        switchBtn.setBackground(new Color(25,42,86));
-        switchBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        switchBtn.setForeground(WHITE);
         switchBtn.setFocusPainted(false);
         switchBtn.setContentAreaFilled(false);
         switchBtn.setOpaque(false);
-
+        switchBtn.setBorderPainted(false);
+        switchBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         // Load and resize icon
         ImageIcon icon = new ImageIcon("images/employeeicon2.png");
         Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
@@ -435,21 +572,30 @@ public class LoginFrame extends JFrame {
         switchBtn.setHorizontalAlignment(SwingConstants.CENTER);
         switchBtn.setHorizontalTextPosition(SwingConstants.RIGHT);
         switchBtn.setIconTextGap(10);
+        // Footer note
+        JLabel footer = new JLabel(
+            "<html><center style='color:#607090'>© PayTrack Payroll System</center></html>");
+        footer.setFont(FONT_SMALL);
+        footer.setHorizontalAlignment(SwingConstants.CENTER);
+        footer.setBounds(0,480,360,20);
+
+        // ── Switch action ──────────────────────────────────────────────────────
 
         switchBtn.addActionListener(e -> {
-
+        	// Show company forms
             if (!companyMode) {
                 animateOverlay(450);
-                switchBtn.setText("Company LOGIN");
+                switchBtn.setText("Switch to Company LOGIN");
                 switchBtn.setIcon(null);  // Remove icon
                 switchBtn.setHorizontalAlignment(SwingConstants.CENTER);
-                title.setText("Company");
+                subtitle.setText(" ");
                 companyMode = true;
             } else {
                 animateOverlay(0);
-                switchBtn.setText("Employee LOGIN");
+                switchBtn.setText("Switch to Employee Login");
                 switchBtn.setIcon(new ImageIcon(img)); // Show icon again
                 title.setText("Welcome");
+                subtitle.setText("Company Portal");
                 companyMode = false;
             }
         });
@@ -457,50 +603,178 @@ public class LoginFrame extends JFrame {
         panel.add(title);
         panel.add(info);
         panel.add(switchBtn);
+        panel.add(footer);
+        panel.add(dots);
+        panel.add(subtitle);
 
         return panel;
     }
 //--------------------animation------------------------------------
+//====================================================================    
     private void animateOverlay(int targetX) {
-
-        Timer timer = new Timer(5, null);
-
+        Timer timer = new Timer(6, null);
         timer.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 int x = overlayPanel.getX();
-
+                int step = Math.max(1, Math.abs(targetX - x) / 8); // ease-out
                 if (x < targetX) {
-
-                    overlayPanel.setLocation(
-                            Math.min(x + 5, targetX), 0);
-
-                    boyLabel.setLocation(
-                            boyLabel.getX() + 1,
-                            boyLabel.getY());
-
-                }
-                else if (x > targetX) {
-
-                    overlayPanel.setLocation(
-                            Math.max(x - 5, targetX), 0);
-
-                    boyLabel.setLocation(
-                            boyLabel.getX() - 1,
-                            boyLabel.getY());
-
-                }
-                else {
-
+                    overlayPanel.setLocation(Math.min(x + step, targetX), 0);
+                } else if (x > targetX) {
+                    overlayPanel.setLocation(Math.max(x - step, targetX), 0);
+                } else {
                     timer.stop();
                 }
+                layeredPane.repaint();
             }
         });
-
         timer.start();
-    }   
+    }
+    // ══════════════════════════════════════════════════════════════════════════
+    //  UI COMPONENT HELPERS
+    // ══════════════════════════════════════════════════════════════════════════
+
+    /** Standard uppercase caption label */
+    private JLabel styledLabel(String text) {
+        JLabel lbl = new JLabel(text.toUpperCase());
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 10));
+        lbl.setForeground(new Color(100, 120, 165));
+        return lbl;
+    }
+
+    /** Rounded text field with placeholder behaviour */
+    private JTextField styledField(String placeholder) {
+        JTextField field = new JTextField(placeholder) {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(WHITE);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+                g2.setColor(isFocusOwner() ? NAVY_LIGHT : BORDER_CLR);
+                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 8, 8);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        field.setFont(FONT_FIELD);
+        field.setForeground(TEXT_HINT);
+        field.setBackground(WHITE);
+        field.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
+        field.setOpaque(false);
+
+        field.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(TEXT_DARK);
+                }
+                field.repaint();
+            }
+            public void focusLost(FocusEvent e) {
+                if (field.getText().trim().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(TEXT_HINT);
+                }
+                field.repaint();
+            }
+        });
+        return field;
+    }
+
+    /** Rounded password field with placeholder behaviour */
+    private JPasswordField styledPassField(String placeholder) {
+        JPasswordField field = new JPasswordField() {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(WHITE);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+                g2.setColor(isFocusOwner() ? NAVY_LIGHT : BORDER_CLR);
+                g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 8, 8);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        field.setFont(FONT_FIELD);
+        field.setForeground(TEXT_HINT);
+        field.setBackground(WHITE);
+        field.setEchoChar((char) 0);   // show placeholder as plain text
+        field.setText(placeholder);
+        field.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
+        field.setOpaque(false);
+
+        field.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                if (String.valueOf(field.getPassword()).equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(TEXT_DARK);
+                    field.setEchoChar('•');
+                }
+                field.repaint();
+            }
+            public void focusLost(FocusEvent e) {
+                if (field.getPassword().length == 0) {
+                    field.setText(placeholder);
+                    field.setForeground(TEXT_HINT);
+                    field.setEchoChar((char) 0);
+                }
+                field.repaint();
+            }
+        });
+        return field;
+    }
+
+    /** Solid rounded primary button */
+    private JButton primaryButton(String text, Color bg, Color fg) {
+        JButton btn = new JButton(text) {
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                Color c = getModel().isPressed()  ? bg.darker()
+                        : getModel().isRollover() ? NAVY_LIGHT
+                        : bg;
+                g2.setColor(c);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        btn.setFont(FONT_BTN);
+        btn.setForeground(fg);
+        btn.setBackground(bg);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setContentAreaFilled(false);
+        btn.setOpaque(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
+
+    /** Underline-style text link button */
+    private JButton linkButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFont(FONT_LINK);
+        btn.setForeground(NAVY_LIGHT);
+        btn.setBackground(null);
+        btn.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, NAVY_LIGHT));
+        btn.setContentAreaFilled(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setForeground(NAVY); }
+            public void mouseExited(MouseEvent e)  { btn.setForeground(NAVY_LIGHT); }
+        });
+        return btn;
+    }
+
+    /** Flash an inline error message, auto-clear after 3 s */
+    private void flashError(JLabel label, String msg) {
+        label.setText(msg);
+        Timer t = new Timer(3000, e -> label.setText(" "));
+        t.setRepeats(false);
+        t.start();
+    }
+
  //--------------
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -509,4 +783,3 @@ public class LoginFrame extends JFrame {
     }
 
 }
-

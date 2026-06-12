@@ -99,6 +99,7 @@ public class AllowanceDAO {
         return list;
     }
 
+        
     public boolean exists(String empId, String allowanceName) {
 
         try {
