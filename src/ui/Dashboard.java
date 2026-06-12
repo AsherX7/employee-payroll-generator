@@ -114,7 +114,7 @@ public class Dashboard extends JPanel {
         pageHeader.add(headerText, BorderLayout.WEST);
 
         // Refresh button
-        JButton refreshBtn = solidBtn("⟳  Refresh", NAVY, ACCENT_GOLD);
+        JButton refreshBtn = solidBtn("Refresh", NAVY, ACCENT_GOLD);
         refreshBtn.addActionListener(e -> loadAllData());
         JPanel btnWrap = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 8));
         btnWrap.setOpaque(false);
@@ -131,8 +131,7 @@ public class Dashboard extends JPanel {
         // ── KPI cards ─────────────────────────────────────────────────────────
         body.add(sectionLabel("Overview"));
         body.add(vgap(10));
-        body.add(buildKpiRow());
-        body.add(vgap(20));
+        body.add(buildKpiRow());        body.add(vgap(20));
 
         // ── Charts + Activities row ───────────────────────────────────────────
         body.add(sectionLabel("Workforce & Activity"));
@@ -203,64 +202,86 @@ public class Dashboard extends JPanel {
     //  KPI CARDS ROW
     // ══════════════════════════════════════════════════════════════════════════
     private JPanel buildKpiRow() {
+
         JPanel row = new JPanel(new GridLayout(1, 4, 16, 0));
         row.setOpaque(false);
-        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 105));
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 170));
 
-        lblEmpVal    = new JLabel("0");
-        lblDeptVal   = new JLabel("0");
+        lblEmpVal = new JLabel("0");
+        lblDeptVal = new JLabel("0");
         lblSalaryVal = new JLabel("₹0");
-        lblAvgVal    = new JLabel("₹0");
+        lblAvgVal = new JLabel("₹0");
 
-        row.add(buildKpiCard("Total Employees",   lblEmpVal,    CARD_GREEN,  "👥"));
-        row.add(buildKpiCard("Departments",        lblDeptVal,   CARD_BLUE,   "🏢"));
-        row.add(buildKpiCard("Monthly Payroll",    lblSalaryVal, CARD_PURPLE, "₹"));
-        row.add(buildKpiCard("Average Salary",     lblAvgVal,    CARD_ORANGE, "~"));
+        row.add(buildKpiCard("Total Employees", lblEmpVal, CARD_GREEN, "👥"));
+        row.add(buildKpiCard("Departments", lblDeptVal, CARD_BLUE, "🏢"));
+        row.add(buildKpiCard("Monthly Payroll", lblSalaryVal, CARD_PURPLE, "₹"));
+        row.add(buildKpiCard("Average Salary", lblAvgVal, CARD_ORANGE, "~"));
 
         return row;
     }
-
+    
     private JPanel buildKpiCard(String title, JLabel valLabel, Color bg, String icon) {
-        JPanel card = new JPanel(null) {
-            @Override protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setPaint(new GradientPaint(0, 0, bg, 0, getHeight(), bg.darker()));
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-                g2.dispose();
-            }
-        };
-        card.setOpaque(false);
 
-        JLabel iconLbl = new JLabel(icon);
-        iconLbl.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        iconLbl.setForeground(new Color(255, 255, 255, 60));
-        iconLbl.setBounds(12, 8, 36, 32);
+        JPanel card = new JPanel(null);
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220), 1));
+        card.setPreferredSize(new Dimension(250, 140));
 
-        JLabel titleLbl = new JLabel(title.toUpperCase());
-        titleLbl.setFont(FONT_CARD_T);
-        titleLbl.setForeground(new Color(210, 228, 255));
-        titleLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+        JLabel titleLbl = new JLabel(title);
+        titleLbl.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        titleLbl.setForeground(new Color(100, 100, 100));
 
-        valLabel.setFont(FONT_CARD_V);
-        valLabel.setForeground(WHITE);
-        valLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        valLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        valLabel.setForeground(Color.BLACK);
 
-        card.add(iconLbl);
-        card.add(titleLbl);
-        card.add(valLabel);
+        JLabel detailsLbl = new JLabel("View Details →");
+        detailsLbl.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        detailsLbl.setForeground(new Color(0, 102, 204));
+        detailsLbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        card.addComponentListener(new ComponentAdapter() {
-            @Override public void componentResized(ComponentEvent e) {
-                int w = card.getWidth();
-                titleLbl.setBounds(0, 10, w - 14, 16);
-                valLabel.setBounds(0, 32, w - 14, 44);
+        detailsLbl.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if (title.equals("Total Employees")) {
+                    JOptionPane.showMessageDialog(
+                            Dashboard.this,
+                            "Total Employees: " + totalEmp);
+                }
+
+                else if (title.equals("Departments")) {
+                    JOptionPane.showMessageDialog(
+                            Dashboard.this,
+                            "Departments: " + totalDept);
+                }
+
+                else if (title.equals("Monthly Payroll")) {
+                    JOptionPane.showMessageDialog(
+                            Dashboard.this,
+                            "Monthly Payroll: ₹" +
+                            String.format("%,d", totalSalary));
+                }
+
+                else if (title.equals("Average Salary")) {
+                    JOptionPane.showMessageDialog(
+                            Dashboard.this,
+                            "Average Salary: ₹" +
+                            String.format("%,.0f", avgSalary));
+                }
             }
         });
 
+        card.add(titleLbl);
+        card.add(valLabel);
+        card.add(detailsLbl);
+
+        titleLbl.setBounds(20, 18, 220, 25);
+        valLabel.setBounds(20, 55, 220, 40);
+        detailsLbl.setBounds(20, 110, 150, 20);
+
         return card;
     }
-
+        
     // ══════════════════════════════════════════════════════════════════════════
     //  BOTTOM ROW — Pie chart left, Recent activities right
     // ══════════════════════════════════════════════════════════════════════════
@@ -350,29 +371,42 @@ public class Dashboard extends JPanel {
                         companyEmail = rs.getString("email");
                     }
                 }
+           
             }
-
             // 2. KPI stats
-            try (Statement st = con.createStatement();
-                 ResultSet rs = st.executeQuery(
-                    "SELECT COUNT(*) AS total_emp, " +
-                    "COUNT(DISTINCT department) AS total_dept, " +
-                    "SUM(Salary) AS total_salary, " +
-                    "AVG(Salary) AS avg_salary FROM employee")) {
-                if (rs.next()) {
-                    totalEmp    = rs.getInt("total_emp");
-                    totalDept   = rs.getInt("total_dept");
-                    totalSalary = rs.getLong("total_salary");
-                    avgSalary   = rs.getDouble("avg_salary");
-                }
-            }
+                try (PreparedStatement pst = con.prepareStatement(
+                        "SELECT COUNT(*) AS total_emp, " +
+                        "COUNT(DISTINCT e.department) AS total_dept, " +
+                        "SUM(e.salary) AS total_salary, " +
+                        "AVG(e.salary) AS avg_salary " +
+                        "FROM employee e " +
+                        "JOIN employee_login el ON e.employeeid = el.employeeid " +
+                        "WHERE el.company_id = ?")) {
 
+                    pst.setInt(1, companyId);
+
+                    try (ResultSet rs = pst.executeQuery()) {
+                        if (rs.next()) {
+                            totalEmp = rs.getInt("total_emp");
+                            totalDept = rs.getInt("total_dept");
+                            totalSalary = rs.getLong("total_salary");
+                            avgSalary = rs.getDouble("avg_salary");
+                        }
+                    }
+                }
             // 3. Department breakdown for pie chart
-            try (Statement st = con.createStatement();
-                 ResultSet rs = st.executeQuery(
-                    "SELECT department, COUNT(*) AS cnt FROM employee GROUP BY department ORDER BY cnt DESC")) {
-                while (rs.next()) {
-                    deptMap.put(rs.getString("department"), rs.getInt("cnt"));
+            try (	PreparedStatement pst = con.prepareStatement(
+            		"SELECT e.department, COUNT(*) AS cnt " +
+            			    "FROM employee e " +
+            			    "JOIN employee_login ec ON e.employeeid = ec.employeeid " +
+            			    "WHERE ec.company_id = ? " +
+            			    "GROUP BY e.department " +
+            			    "ORDER BY cnt DESC")){
+                   	pst.setInt(1, companyId);
+            	try (ResultSet rs = pst.executeQuery()) {
+            		while (rs.next()) {
+                        deptMap.put(rs.getString("department"), rs.getInt("cnt"));
+                    }
                 }
             }
 
@@ -417,7 +451,7 @@ public class Dashboard extends JPanel {
     private void refreshUI() {
         // Company banner
         lblWelcome.setText("Welcome back, " + companyName + "!");
-        lblCompanyEmail.setText("✉  " + companyEmail);
+        lblCompanyEmail.setText("email: " + companyEmail);
         lblCompanyName.setText(companyName);
 
         // KPI cards

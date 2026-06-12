@@ -6,32 +6,53 @@ import java.awt.*;
 import dao.EmployeeDAO;
 import model.Employee;
 import utils.Validation;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 
 public class Payrollgen extends JPanel {
+	
+	private static final Color NAVY = new Color(15, 35, 70);
+	private static final Color GOLD = new Color(255, 193, 7);
+	private static final Color BG = new Color(245, 247, 252);
 
     private static final long serialVersionUID = 1L;
 
     private JTextField idField;
-    private JTextArea outputArea;
+    private JTextPane outputArea;
     private JButton generateButton;
     private JButton backButton;
-    private int companyId;
+
     public Payrollgen() {
-    	setLayout(new BorderLayout(10, 10));
+
+        setLayout(new BorderLayout(10, 10));
+        setBackground(BG);
 
         // Components
         idField = new JTextField(15);
-        outputArea = new JTextArea();
+        outputArea = new JTextPane();
         outputArea.setEditable(false);
         outputArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        outputArea.setBackground(Color.WHITE);
+        outputArea.setForeground(NAVY);
         generateButton = new JButton("Generate Payslip");
+        generateButton.setBackground(NAVY);
+        generateButton.setForeground(Color.WHITE);
+        generateButton.setFocusPainted(false);
         backButton = new JButton("Back");
+        backButton.setBackground(GOLD);
+        backButton.setForeground(NAVY);
+        backButton.setFocusPainted(false);
 
         // Top Panel
         JPanel formPanel = new JPanel();
 
-        formPanel.add(new JLabel("Employee ID"));
+        JLabel idLabel = new JLabel("Employee ID");
+        idLabel.setForeground(NAVY);
+        idLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        formPanel.add(idLabel);
         formPanel.add(idField);
 
         // Button Panel
@@ -42,6 +63,9 @@ public class Payrollgen extends JPanel {
 
         // Container
         JPanel topPanel = new JPanel();
+        topPanel.setBackground(BG);
+        formPanel.setBackground(BG);
+        buttonPanel.setBackground(BG);
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.add(formPanel);
         topPanel.add(buttonPanel);
@@ -53,9 +77,13 @@ public class Payrollgen extends JPanel {
 
         // Back Button
         backButton.addActionListener(e -> {
-            HomeFrame homeFrame = (HomeFrame) SwingUtilities.getWindowAncestor(this);
-            homeFrame.showDashboard();
+
+        	JOptionPane.showMessageDialog(this, "Use the side menu to navigate.");
+            
+
         });
+
+        setVisible(true);
     }
 
     private void generatePayslip() {
@@ -124,38 +152,54 @@ public class Payrollgen extends JPanel {
          double netSalary =
                  grossSalary - totalDeductions;
 
-         String payslip =
-        		 "=====================================\n" +
-        		 "         EMPLOYEE PAYSLIP\n" +
-        		 "=====================================\n" +
-        		 "Employee ID   : " + emp.getEmpId() + "\n" +
-        		 "Employee Name : " + emp.getName() + "\n" +
-        		 "Employee Type : " + emp.getEmpType() + "\n" +
-        		 "=====================================\n" +
+         StyledDocument doc = outputArea.getStyledDocument();
 
-        		 "EARNINGS\n" +
-        		 "-------------------------------------\n" +
-        		 "Basic Salary        : ₹" + String.format("%.2f", basicSalary) + "\n" +
-        		 "HRA (40%)           : ₹" + String.format("%.2f", hra) + "\n" +
-        		 "Transport (10%)     : ₹" + String.format("%.2f", ta) + "\n" +
-        		 "Medical (5%)        : ₹" + String.format("%.2f", ma) + "\n" +
-        		 "-------------------------------------\n" +
-        		 "Gross Salary        : ₹" + String.format("%.2f", grossSalary) + "\n" +
+         Style normal = outputArea.addStyle("normal", null);
 
-        		 "\nDEDUCTIONS\n" +
-        		 "-------------------------------------\n" +
-        		 "PF (12%)            : ₹" + String.format("%.2f", pf) + "\n" +
-        		 "ESI (0.75%)         : ₹" + String.format("%.2f", esi) + "\n" +
-        		 "TDS (8%)            : ₹" + String.format("%.2f", tds) + "\n" +
-        		 "Professional Tax    : ₹" + String.format("%.2f", pt) + "\n" +
-        		 "-------------------------------------\n" +
-        		 "Total Deductions    : ₹" + String.format("%.2f", totalDeductions) + "\n" +
+         Style green = outputArea.addStyle("green", null);
+         StyleConstants.setForeground(green, Color.GREEN);
 
-        		 "\n=====================================\n" +
-        		 "NET SALARY          : ₹" + String.format("%.2f", netSalary) + "\n" +
-        		 "=====================================";
+         Style red = outputArea.addStyle("red", null);
+         StyleConstants.setForeground(red, Color.RED);
+
+         Style blue = outputArea.addStyle("blue", null);
+         StyleConstants.setForeground(blue, Color.BLUE);
+
+         doc.remove(0, doc.getLength());
+
+         doc.insertString(doc.getLength(),
+                 "=====================================\n" +
+                 "         EMPLOYEE PAYSLIP\n" +
+                 "=====================================\n" +
+                 "Employee ID   : " + emp.getEmpId() + "\n" +
+                 "Employee Name : " + emp.getName() + "\n" +
+                 "Employee Type : " + emp.getEmpType() + "\n" +
+                 "=====================================\n\n",
+                 normal);
+
+         doc.insertString(doc.getLength(), "EARNINGS\n", green);
+
+         doc.insertString(doc.getLength(),
+                 "Basic Salary        : ₹" + String.format("%.2f", basicSalary) + "\n" +
+                 "HRA (40%)           : ₹" + String.format("%.2f", hra) + "\n" +
+                 "Transport (10%)     : ₹" + String.format("%.2f", ta) + "\n" +
+                 "Medical (5%)        : ₹" + String.format("%.2f", ma) + "\n\n",
+                 normal);
+
+         doc.insertString(doc.getLength(), "DEDUCTIONS\n", red);
+
+         doc.insertString(doc.getLength(),
+                 "PF (12%)            : ₹" + String.format("%.2f", pf) + "\n" +
+                 "ESI (0.75%)         : ₹" + String.format("%.2f", esi) + "\n" +
+                 "TDS (8%)            : ₹" + String.format("%.2f", tds) + "\n" +
+                 "Professional Tax    : ₹" + String.format("%.2f", pt) + "\n\n",
+                 normal);
+
+         doc.insertString(doc.getLength(),
+                 "NET SALARY : ₹" + String.format("%.2f", netSalary),
+                 blue);
             
-            outputArea.setText(payslip);
+            
     } 
         catch(Exception ex) {
 
@@ -167,8 +211,6 @@ public class Payrollgen extends JPanel {
             );
         }
 }
-    public static void main(String[] args) {
-
-        new Payrollgen();
-    }
+    
 }
+
