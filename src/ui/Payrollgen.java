@@ -11,7 +11,11 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 
-public class Payrollgen extends JPanel { 
+public class Payrollgen extends JPanel {
+	
+	private static final Color NAVY = new Color(15, 35, 70);
+	private static final Color GOLD = new Color(255, 193, 7);
+	private static final Color BG = new Color(245, 247, 252);
 
     private static final long serialVersionUID = 1L;
 
@@ -23,20 +27,31 @@ public class Payrollgen extends JPanel {
     public Payrollgen() {
 
         setLayout(new BorderLayout(10, 10));
+        setBackground(BG);
 
         // Components
         idField = new JTextField(15);
         outputArea = new JTextPane();
         outputArea.setEditable(false);
         outputArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        outputArea.setBackground(Color.WHITE);
+        outputArea.setForeground(NAVY);
         generateButton = new JButton("Generate Payslip");
+        generateButton.setBackground(NAVY);
+        generateButton.setForeground(Color.WHITE);
+        generateButton.setFocusPainted(false);
         backButton = new JButton("Back");
+        backButton.setBackground(GOLD);
+        backButton.setForeground(NAVY);
+        backButton.setFocusPainted(false);
 
         // Top Panel
         JPanel formPanel = new JPanel();
 
-        formPanel.add(new JLabel("Employee ID"));
-        formPanel.add(idField);
+        JLabel idLabel = new JLabel("Employee ID");
+        idLabel.setForeground(NAVY);
+        idLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        formPanel.add(idLabel);
 
         // Button Panel
         JPanel buttonPanel = new JPanel();
@@ -46,6 +61,9 @@ public class Payrollgen extends JPanel {
 
         // Container
         JPanel topPanel = new JPanel();
+        topPanel.setBackground(BG);
+        formPanel.setBackground(BG);
+        buttonPanel.setBackground(BG);
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.add(formPanel);
         topPanel.add(buttonPanel);
