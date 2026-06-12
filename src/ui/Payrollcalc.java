@@ -24,73 +24,78 @@ public class Payrollcalc extends JPanel {
         setLayout(null);
         setBackground(new Color(245, 248, 255));
         setPreferredSize(new Dimension(1000, 600));
-
+       //content panel
+        JPanel content = new JPanel();
+        content.setLayout(null);
+        content.setBackground(new Color(245,248,255));
+        content.setBounds(20, 140, 1280, 700);
+        add(content);
         // ================= TITLE BAR =================
         JPanel titleBar = new JPanel();
-        titleBar.setBounds(0, 0, 1000, 60);
+        titleBar.setBounds(0, 0, 1550, 130);
         titleBar.setBackground(new Color(4, 24, 82));
-        titleBar.setLayout(new FlowLayout(FlowLayout.CENTER));
+        titleBar.setLayout(null);
 
         JLabel title = new JLabel("PAYROLL CALCULATION");
         title.setForeground(Color.WHITE);
         title.setFont(new Font("Segoe UI", Font.BOLD, 24));
-
+        title.setBounds(520, 40, 400, 40);
         titleBar.add(title);
         add(titleBar);
 
         // ================= FORM =================
         JLabel l1 = new JLabel("Employee Type");
-        l1.setBounds(50, 90, 150, 25);
+        l1.setBounds(50, 50, 150, 25);
 
         txtEmpType = new JTextField();
-        txtEmpType.setBounds(200, 90, 200, 28);
+        txtEmpType.setBounds(230, 50, 240, 32);
 
         JLabel l2 = new JLabel("Tax Name");
-        l2.setBounds(50, 130, 150, 25);
+        l2.setBounds(50, 70, 150, 25);
 
         txtTaxName = new JTextField();
-        txtTaxName.setBounds(200, 130, 200, 28);
+        txtTaxName.setBounds(230, 70, 240, 32);
 
         JLabel l3 = new JLabel("Percentage");
-        l3.setBounds(50, 170, 150, 25);
+        l3.setBounds(50, 90, 150, 25);
 
         txtTaxPer = new JTextField();
-        txtTaxPer.setBounds(200, 170, 200, 28);
+        txtTaxPer.setBounds(230, 90, 240, 32);
 
         JLabel l4 = new JLabel("Type");
-        l4.setBounds(50, 210, 150, 25);
+        l4.setBounds(60, 220, 150, 25);
 
         txtType = new JTextField();
-        txtType.setBounds(200, 210, 200, 28);
+        txtType.setBounds(230, 220, 240, 32);
 
-        add(l1);
-        add(txtEmpType);
-        add(l2);
-        add(txtTaxName);
-        add(l3);
-        add(txtTaxPer);
-        add(l4);
-        add(txtType);
+        content.add(l1);
+        content.add(txtEmpType);
+        content.add(l2);
+        content.add(txtTaxName);
+        content.add(l3);
+        content.add(txtTaxPer);
+        content.add(l4);
+        content.add(txtType);
 
         // ================= BUTTONS =================
         btnSave = new JButton("SAVE");
-        btnSave.setBounds(450, 100, 120, 35);
+        btnSave.setBounds(560, 70, 150, 40);
         btnSave.setBackground(new Color(4, 24, 82));
         btnSave.setForeground(Color.WHITE);
 
         btnUpdate = new JButton("UPDATE");
-        btnUpdate.setBounds(450, 150, 120, 35);
+        btnUpdate.setBounds(560, 130, 150, 40);
         btnUpdate.setBackground(new Color(0, 153, 76));
         btnUpdate.setForeground(Color.WHITE);
 
         btnDelete = new JButton("DELETE");
-        btnDelete.setBounds(450, 200, 120, 35);
+        btnDelete.setBounds(560, 190, 150, 40);
         btnDelete.setBackground(Color.RED);
         btnDelete.setForeground(Color.WHITE);
 
-        add(btnSave);
-        add(btnUpdate);
-        add(btnDelete);
+        content.add(btnSave);
+        content.add(btnUpdate);
+        content.add(btnDelete);
 
         // ================= TABLE =================
         String[] cols = {"Employee Type", "Tax Name", "Percentage", "Type"};
@@ -107,9 +112,9 @@ public class Payrollcalc extends JPanel {
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
         JScrollPane sp = new JScrollPane(table);
-        sp.setBounds(50, 280, 880, 250);
+        sp.setBounds(60, 250, 1250, 300);
 
-        add(sp);
+        content.add(sp);
 
         // ================= LOAD DATA =================
         loadTable();
@@ -223,5 +228,5 @@ public class Payrollcalc extends JPanel {
             JOptionPane.showMessageDialog(this, "Delete Error");
         }
     }
+    }
 
-}

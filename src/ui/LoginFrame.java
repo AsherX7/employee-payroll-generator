@@ -257,7 +257,7 @@ public class LoginFrame extends JFrame {
             EmployeeDAO dao = new EmployeeDAO();
             if (dao.validateLogin(empId, password)) {
                 errLabel.setText(" ");
-                //new EmployeeDashboard(empId);
+                new EmployeeDashboard(empId);
                 dispose();
             } else {
                 flashError(errLabel, "Invalid Employee ID or password.");

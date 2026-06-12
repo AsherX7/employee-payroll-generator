@@ -198,8 +198,8 @@ e.printStackTrace();
 		public boolean validateLogin(String username, String password) {
 
 String sql =
-"SELECT * FROM employee "
-+ "WHERE username=? AND password=?";
+"SELECT * FROM employee_login "
++ "WHERE employeeid=? AND password=?";
 
 try {
 	Connection conn=DBConnection.getConnection();
