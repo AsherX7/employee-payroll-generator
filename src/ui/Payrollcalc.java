@@ -51,22 +51,22 @@ public class Payrollcalc extends JPanel {
         txtEmpType.setBounds(230, 50, 240, 32);
 
         JLabel l2 = new JLabel("Tax Name");
-        l2.setBounds(50, 70, 150, 25);
+        l2.setBounds(50, 100, 150, 25);
 
         txtTaxName = new JTextField();
-        txtTaxName.setBounds(230, 70, 240, 32);
+        txtTaxName.setBounds(230, 100, 240, 32);
 
         JLabel l3 = new JLabel("Percentage");
-        l3.setBounds(50, 90, 150, 25);
+        l3.setBounds(50, 150, 150, 25);
 
         txtTaxPer = new JTextField();
-        txtTaxPer.setBounds(230, 90, 240, 32);
+        txtTaxPer.setBounds(230, 150, 240, 32);
 
         JLabel l4 = new JLabel("Type");
-        l4.setBounds(60, 220, 150, 25);
+        l4.setBounds(60, 200, 150, 25);
 
         txtType = new JTextField();
-        txtType.setBounds(230, 220, 240, 32);
+        txtType.setBounds(230, 200, 240, 32);
 
         content.add(l1);
         content.add(txtEmpType);
@@ -112,7 +112,7 @@ public class Payrollcalc extends JPanel {
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
         JScrollPane sp = new JScrollPane(table);
-        sp.setBounds(60, 250, 1250, 300);
+        sp.setBounds(0, 250, 1250, 300);
 
         content.add(sp);
 
