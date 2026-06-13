@@ -48,6 +48,8 @@ Tables:
 - employee
 - payroll
 - employee_allowances
+- employee_login
+- company
 
 ## How to Run
 
