@@ -325,7 +325,7 @@ public class LoginFrame extends JFrame {
         passField.setBounds(100, 240, 250, 35);
         panel.add(passField);
 
-        JButton loginBtn = primaryButton("Login→", NAVY, ACCENT_GOLD);
+        JButton loginBtn = primaryButton("Login", NAVY, ACCENT_GOLD);
         loginBtn.setBounds(165, 310, 140, 35);
         loginBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
         panel.add(loginBtn);

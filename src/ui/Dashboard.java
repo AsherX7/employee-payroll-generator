@@ -121,7 +121,7 @@ public class Dashboard extends JPanel {
 
         body.add(pageHeader);
         body.add(vgap(16));
-
+        
         // ── Company info banner ───────────────────────────────────────────────
         body.add(buildCompanyBanner());
         body.add(vgap(20));

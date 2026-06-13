@@ -141,7 +141,7 @@ public class ModifyEmp extends JPanel {
 
     private void setupActionListeners() {
         
-        // ➕ ADD RECORD OPERATION
+        // ADD RECORD OPERATION
     	btnAdd.addActionListener(e -> {
     	    String id = txtId.getText().trim();
     	    String name = txtName.getText().trim();
@@ -185,7 +185,7 @@ public class ModifyEmp extends JPanel {
     	    }
     	});
 
-        // ❌ DELETE RECORD OPERATION
+        // DELETE RECORD OPERATION
         btnDelete.addActionListener(e -> {
             String id = txtId.getText().trim();
             if (id.isEmpty()) {
@@ -221,7 +221,7 @@ public class ModifyEmp extends JPanel {
             }
         });
 
-        // 🔍 SEARCH RECORD OPERATION (Placeholder template action layout hook)
+        // SEARCH RECORD OPERATION (Placeholder template action layout hook)
         btnSearch.addActionListener(e -> {
             String id = txtId.getText().trim();
             if (id.isEmpty()) {
@@ -263,7 +263,7 @@ public class ModifyEmp extends JPanel {
                 ex.printStackTrace();
             }
         });
-               // 🔄 UPDATE RECORD OPERATION (Placeholder template action layout hook)
+               // UPDATE RECORD OPERATION (Placeholder template action layout hook)
         btnUpdate.addActionListener(e -> {
             String id = txtId.getText().trim();
             if (id.isEmpty()) {
@@ -299,7 +299,7 @@ public class ModifyEmp extends JPanel {
             }
         });
 
-        // 📊 MANAGE ALLOWANCES SYSTEM (Launches Pop-up Modal Window)
+        // MANAGE ALLOWANCES SYSTEM 
         btnAddAllowance.addActionListener(e -> {
             String currentId = txtId.getText().trim();
             if (currentId.isEmpty()) {
@@ -318,8 +318,13 @@ public class ModifyEmp extends JPanel {
     private void clearFields() {
         txtId.setText("");   txtName.setText("");    txtDept.setText("");  txtType.setText("");
         txtExp.setText("");  txtRate.setText("");   txtHours.setText(""); txtSalary.setText("");
+    
+ // back button action 
+    btnBack.addActionListener(e -> {
+        HomeFrame homeFrame = (HomeFrame) SwingUtilities.getWindowAncestor(this);
+        homeFrame.showDashboard();
+    });
     }
-
     // ==========================================
     // INNER SUB-CLASS: THE ALLOWANCE POP-UP WINDOW
     // ==========================================
