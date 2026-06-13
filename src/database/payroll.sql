@@ -16,7 +16,7 @@ hourly_rate int,
 hours_worked int,
 Salary int
 );
-iNSERT INTO employee
+INSERT INTO employee
 VALUES
 ('E01','Febi Shaji','HR','Full-time',2,0,0,25000),
 ('E02','Stephy Wilson','IT','Part-time',1,200,50,10000),
@@ -100,7 +100,7 @@ INSERT INTO employee_login VALUES
 ('E08','3354',2),
 ('E09','7733',2),
 ('E10','2255',2),
-('E11','1236',2);
+('E11','1236',2),
 ('E12','7878',2),
 ('E13','6767',2);
 

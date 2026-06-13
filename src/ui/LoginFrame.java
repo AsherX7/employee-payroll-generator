@@ -189,14 +189,14 @@ public class LoginFrame extends JFrame {
         // ── Show / Hide password toggle ───────────────────────────────────────
         JCheckBox showPass = new JCheckBox("Show password");
         showPass.setFont(FONT_SMALL);
-        showPass.setForeground(Color.black);
+        showPass.setForeground(new Color(100, 120, 165));
         showPass.setBackground(WHITE);
         showPass.setFocusPainted(false);
-        showPass.setBounds(120, 320, 10, 10);  // sits between pass and company fields
-        showPass.addActionListener(e -> {
-            passField.setEchoChar(showPass.isSelected() ? (char) 0 : '•');
-        });
+        showPass.setBounds(150, 310, 120, 20);
+        showPass.addActionListener(e ->
+            passField.setEchoChar(showPass.isSelected() ? (char) 0 : '•'));
         panel.add(showPass);
+
 
         // company id label
         JLabel lblid = new JLabel("CompanyID");
@@ -325,7 +325,7 @@ public class LoginFrame extends JFrame {
         passField.setBounds(100, 240, 250, 35);
         panel.add(passField);
 
-        JButton loginBtn = primaryButton("Login →", NAVY, ACCENT_GOLD);
+        JButton loginBtn = primaryButton("Login→", NAVY, ACCENT_GOLD);
         loginBtn.setBounds(165, 310, 140, 35);
         loginBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
         panel.add(loginBtn);

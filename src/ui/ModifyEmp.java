@@ -313,17 +313,7 @@ public class ModifyEmp extends JPanel {
             allowanceDialog.setVisible(true);
         });
 
-        // ⬅ BACK ROUTING NAVIGATION
-        btnBack.addActionListener(e -> {
-            if (mainContentPanel != null && mainContentPanel.getLayout() instanceof CardLayout) {
-                CardLayout layoutEngine = (CardLayout) mainContentPanel.getLayout();
-                // "DashboardView" should match the string key register label name your friend set in HomeFrame
-                layoutEngine.show(mainContentPanel, "DashboardView"); 
-            } else {
-                JOptionPane.showMessageDialog(this, "Navigation Configuration Warning: Base container layout structure missing CardLayout reference.");
-            }
-        });
-    }
+          }
 
     private void clearFields() {
         txtId.setText("");   txtName.setText("");    txtDept.setText("");  txtType.setText("");
