@@ -23,7 +23,16 @@ VALUES
 ('E03','Sophie Edward','Finance','Full-time',4,0,0,40000),
 ('E04','Meera Krishna','Marketing','Part-time',2,150,40,6000),
 ('E05','NikhiL Dev','IT','Full-time',3,0,0,35000),
-('E06','Johin P','HR','Part-time',1,180,45,8100);
+('E06','Johin P','HR','Part-time',1,180,45,8100),
+('E07','Niran Sasi','HR','Full-time',5,0,0,55000),
+('E08','Sarangi R Koshi','IT','Part-time',2,200,45,9000),
+('E09','Sabari A S','Finance','Full-time',4,0,0,49000),
+('E10','Athul Krishna','Marketing','Part-time',1,150,45,6750),
+('E11','Abhi Raj','Design','Full-time',6,0,0,115000),
+('E12','Adhithyan Byju','IT','Part-time',1,260,45,11700),
+('E13','Michael B','HR','Full-time',2,0,0,35000);
+
+
 UPDATE employee
 SET salary = 30000
 WHERE employeeid = 'E01';
@@ -65,7 +74,11 @@ VALUES
 ('E02','DA',500),
 ('E03','MA',1000),
 ('E04','MA',1000),
-('E04','TA',800);
+('E04','TA',800),
+('E07','DA',500),
+('E08','MA',1000),
+('E10','Overtime',5000),
+('E13','TA',800);
 
 // database4
 use payroll_schema;
@@ -81,7 +94,16 @@ INSERT INTO employee_login VALUES
 ('E02','1111',2),
 ('E03','2222',1),
 ('E04','3333',2),
-('E05','4444',1);
+('E05','4444',1),
+('E06','3412',1),
+('E07','4536',1),
+('E08','3354',2),
+('E09','7733',2),
+('E10','2255',2),
+('E11','1236',2);
+('E12','7878',2),
+('E13','6767',2);
+
 
 // database5
 
