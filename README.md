@@ -30,7 +30,7 @@ Employee Payroll Generator is a Java-based desktop application developed using J
 
 ## Project Structure
 
-```EmployeePayrollGenerator/
+EmployeePayrollGenerator/
 │
 ├── src/
 │   ├── dao/
