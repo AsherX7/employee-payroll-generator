@@ -9,17 +9,19 @@ import dao.AllowanceDAO;
 public class Payrollcalc extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private JTextField txtEmpType;
+    private  JComboBox<String>  txtEmpType;
     private JTextField txtTaxName;
     private JTextField txtTaxPer;
-    private JTextField txtType;
+    private  JComboBox<String> txtType; 
 
     private JTable table;
     private DefaultTableModel model;
+    private final int companyId;
 
     private JButton btnSave, btnUpdate, btnDelete;
 
-    public Payrollcalc() {
+    public Payrollcalc(int companyId) {
+        this.companyId = companyId;
 
         setLayout(null);
         setBackground(new Color(245, 248, 255));
@@ -46,8 +48,8 @@ public class Payrollcalc extends JPanel {
         // ================= FORM =================
         JLabel l1 = new JLabel("Employee Type");
         l1.setBounds(50, 50, 150, 25);
-
-        txtEmpType = new JTextField();
+        String[] types = {"FULLTIME", "PARTTIME"};
+        txtEmpType =  new JComboBox<>(types);
         txtEmpType.setBounds(230, 50, 240, 32);
 
         JLabel l2 = new JLabel("Tax Name");
@@ -64,8 +66,8 @@ public class Payrollcalc extends JPanel {
 
         JLabel l4 = new JLabel("Type");
         l4.setBounds(60, 200, 150, 25);
-
-        txtType = new JTextField();
+        String[] da = {"DEDUCTION", "ALLOWANCE"};
+        txtType = new JComboBox<>(da);
         txtType.setBounds(230, 200, 240, 32);
 
         content.add(l1);
@@ -126,10 +128,10 @@ public class Payrollcalc extends JPanel {
 
             if (row >= 0) {
 
-                txtEmpType.setText(model.getValueAt(row, 0).toString());
+                txtEmpType.setSelectedItem((model.getValueAt(row, 0).toString()));
                 txtTaxName.setText(model.getValueAt(row, 1).toString());
                 txtTaxPer.setText(model.getValueAt(row, 2).toString());
-                txtType.setText(model.getValueAt(row, 3).toString());
+                txtType.setSelectedItem(model.getValueAt(row, 3).toString());
             }
         });
 
@@ -172,12 +174,11 @@ public class Payrollcalc extends JPanel {
             AllowanceDAO dao = new AllowanceDAO();
 
             dao.addTax(
-                    txtEmpType.getText(),
-                    txtTaxName.getText(),
-                    Double.parseDouble(txtTaxPer.getText()),
-                    txtType.getText()
-            );
-
+            	    txtEmpType.getSelectedItem().toString(),
+            	    txtTaxName.getText(),
+            	    Double.parseDouble(txtTaxPer.getText()),
+            	    txtType.getSelectedItem().toString()
+            	);
             loadTable();
 
             JOptionPane.showMessageDialog(this, "Tax Saved Successfully");

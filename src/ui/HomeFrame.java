@@ -170,20 +170,20 @@ private JButton createMenuButton(String text) {
 
             public void showPayrollgen() {
                 contentPanel.removeAll();
-                contentPanel.add(new Payrollgen());
+                contentPanel.add(new Payrollgen(companyId));
                 contentPanel.revalidate();
                 contentPanel.repaint();
             }
 
             public void showPayrollcalc() {
                 contentPanel.removeAll();
-                contentPanel.add(new Payrollcalc());
+                contentPanel.add(new Payrollcalc(companyId));
                 contentPanel.revalidate();
                 contentPanel.repaint();
             }
             public void showModifyEmp() {
                 contentPanel.removeAll();
-                contentPanel.add(new ModifyEmp());
+                contentPanel.add(new ModifyEmp( companyId));
                 contentPanel.revalidate();
                 contentPanel.repaint();
             }

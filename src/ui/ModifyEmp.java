@@ -9,11 +9,11 @@ public class ModifyEmp extends JPanel {
 	private static final long serialVersionUID = 1L;
 
     // Form Input Fields
-    private JTextField txtId, txtName, txtDept, txtType, txtExp, txtRate, txtHours, txtSalary;
-    
+    private JTextField txtId, txtName, txtDept, txtExp, txtRate, txtHours, txtSalary;
+    private JComboBox<String> txtType;
     // Control Buttons
     private JButton btnAdd, btnDelete, btnUpdate, btnSearch, btnBack, btnAddAllowance;
-    
+    private final int companyId;
     // Database Reference
     private EmployeeDAO empDAO;
     
@@ -21,7 +21,8 @@ public class ModifyEmp extends JPanel {
     private JPanel mainContentPanel;
 
     // Constructor matching the component setup
-    public ModifyEmp() {
+    public ModifyEmp(int companyId) {
+        this.companyId = companyId;
     	java.awt.CardLayout layoutManager = new java.awt.CardLayout();
         this.mainContentPanel = new javax.swing.JPanel(layoutManager);
         this.mainContentPanel.add(new javax.swing.JPanel(), "Home");
@@ -50,13 +51,13 @@ public class ModifyEmp extends JPanel {
         gridForm.add(new JLabel("Employee ID:"));       txtId = new JTextField();     gridForm.add(txtId);
         gridForm.add(new JLabel("Full Name:"));         txtName = new JTextField();   gridForm.add(txtName);
         gridForm.add(new JLabel("Department:"));        txtDept = new JTextField();   gridForm.add(txtDept);
-        gridForm.add(new JLabel("Employment Type:"));   txtType = new JTextField();   gridForm.add(txtType);
+        gridForm.add(new JLabel("Employment Type:"));   String[] types = {"Full-time", "Part-time"};txtType = new JComboBox<>(types);   gridForm.add(txtType);
         gridForm.add(new JLabel("Years Experience:"));  txtExp = new JTextField();    gridForm.add(txtExp);
         gridForm.add(new JLabel("Hourly Rate:"));       txtRate = new JTextField();   gridForm.add(txtRate);
         gridForm.add(new JLabel("Hours Worked:"));      txtHours = new JTextField();  gridForm.add(txtHours);
         gridForm.add(new JLabel("Calculated Salary:")); txtSalary = new JTextField(); gridForm.add(txtSalary);
         JTextField[] fields = {
-        	    txtId, txtName, txtDept, txtType,
+        	    txtId, txtName, txtDept,
         	    txtExp, txtRate, txtHours, txtSalary
         	};
 
@@ -67,6 +68,11 @@ public class ModifyEmp extends JPanel {
         	        BorderFactory.createEmptyBorder(5, 8, 5, 8)
         	    ));
         	}
+        	txtType.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        	    txtType.setBorder(BorderFactory.createCompoundBorder(
+        	        BorderFactory.createLineBorder(new Color(220, 225, 230)),
+        	        BorderFactory.createEmptyBorder(5, 8, 5, 8))); 
+        	        
         	for (Component c : gridForm.getComponents()) {
         	    if (c instanceof JLabel) {
         	        c.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -162,7 +168,7 @@ public class ModifyEmp extends JPanel {
     	        pst.setString(1, id);
     	        pst.setString(2, name);
     	        pst.setString(3, txtDept.getText().trim());
-    	        pst.setString(4, txtType.getText().trim());
+    	        pst.setString(4, txtType.getSelectedItem().toString());
     	        
     	        // Handle numerical defaults if inputs are empty
     	        pst.setInt(5, txtExp.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtExp.getText().trim()));
@@ -199,27 +205,51 @@ public class ModifyEmp extends JPanel {
                 return; 
             }
 
-            String query = "DELETE FROM employee WHERE employeeid = ?";
-
             try {
                 java.sql.Connection con = dao.DBConnection.getConnection();
-                java.sql.PreparedStatement pst = con.prepareStatement(query);
-                pst.setString(1, id);
+                
+                // Define clean, individual queries without syntax conflicts
+                String queryDisableFK = "SET FOREIGN_KEY_CHECKS=0";
+                String queryDeleteLogin = "DELETE FROM payroll_schema.employee_login WHERE employeeid = ?";
+                String queryDeleteEmp = "DELETE FROM payroll_schema.employee WHERE employeeid = ?";
+                String queryEnableFK = "SET FOREIGN_KEY_CHECKS=1";
 
-                int rowsAffected = pst.executeUpdate();
+                // Step 1: Disable FK checks
+                java.sql.PreparedStatement pst1 = con.prepareStatement(queryDisableFK);
+                pst1.executeUpdate();
+
+                // Step 2: Delete Login Data
+                java.sql.PreparedStatement pst2 = con.prepareStatement(queryDeleteLogin);
+                pst2.setString(1, id);
+                pst2.executeUpdate();
+
+                // Step 3: Delete Employee Data
+                java.sql.PreparedStatement pst3 = con.prepareStatement(queryDeleteEmp);
+                pst3.setString(1, id);
+                int rowsAffected = pst3.executeUpdate();
+
+                // Step 4: Re-enable FK checks
+                java.sql.PreparedStatement pst4 = con.prepareStatement(queryEnableFK);
+                pst4.executeUpdate();
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(this, "Employee record deleted successfully!");
                     clearFields(); // Clears all text boxes after successful deletion
                 } else {
                     JOptionPane.showMessageDialog(this, "No record found to delete.");
                 }
-                
-                pst.close();
+                pst1.close();
+                pst2.close();
+                pst3.close();
+                pst4.close();
+
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Delete Error: " + ex.getMessage());
                 ex.printStackTrace();
-            }
-        });
+            }});
+            
+           
+       
 
         // SEARCH RECORD OPERATION (Placeholder template action layout hook)
         btnSearch.addActionListener(e -> {
@@ -229,20 +259,29 @@ public class ModifyEmp extends JPanel {
                 return;
             }
             
-            String query = "SELECT * FROM employee WHERE employeeid = ?";
+            String query =
+            	    "SELECT * FROM employee e " +
+            	    	    "WHERE e.employeeid = ? " +
+            	    	    "AND EXISTS (" +
+            	    	    " SELECT 1 FROM employee_login el " +
+            	    	    " WHERE el.employeeid = e.employeeid " +
+            	    	    " AND el.company_id = ?" +
+            	    	    ")";
             
             try {
                 // 1. Establish direct connection right here in your file
                 java.sql.Connection con = dao.DBConnection.getConnection();
                 java.sql.PreparedStatement pst = con.prepareStatement(query);
                 pst.setString(1, id);
+                pst.setInt(2,companyId);
+
                 java.sql.ResultSet rs = pst.executeQuery();
                 
                 if (rs.next()) {
                     // 2. Fetch directly from database columns into your text fields
                     txtName.setText(rs.getString("name"));
                     txtDept.setText(rs.getString("department"));
-                    txtType.setText(rs.getString("type"));
+                    txtType.setSelectedItem(rs.getString("type"));
                     txtExp.setText(String.valueOf(rs.getInt("year_exp")));
                     txtRate.setText(String.valueOf(rs.getDouble("hourly_rate")));
                     txtHours.setText(String.valueOf(rs.getInt("hours_worked")));
@@ -280,7 +319,7 @@ public class ModifyEmp extends JPanel {
                 // Bind the updated text field inputs to the SQL statement
                 pst.setString(1, txtName.getText().trim());
                 pst.setString(2, txtDept.getText().trim());
-                pst.setString(3, txtType.getText().trim());
+                pst.setString(3, txtType.getSelectedItem().toString());
                 pst.setInt(4, Integer.parseInt(txtExp.getText().trim()));
                 pst.setDouble(5, Double.parseDouble(txtRate.getText().trim()));
                 pst.setInt(6, Integer.parseInt(txtHours.getText().trim()));
@@ -316,7 +355,7 @@ public class ModifyEmp extends JPanel {
           }
 
     private void clearFields() {
-        txtId.setText("");   txtName.setText("");    txtDept.setText("");  txtType.setText("");
+        txtId.setText("");   txtName.setText("");    txtDept.setText("");  txtType.setSelectedIndex(0);
         txtExp.setText("");  txtRate.setText("");   txtHours.setText(""); txtSalary.setText("");
     
  // back button action 
@@ -483,23 +522,7 @@ btnAddRow.addActionListener(ev -> model.addRow(new Object[]{empId, "", "0.00"}))
 
             btnBack.addActionListener(ev -> dispose());
         }
-    } // <-- This closes the AllowanceDialog inner class
+    } }
     
  
-//Paste this right before the last closing brace of the class
-public static void main(String[] args) {
-	try {
-		javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
-	}catch(Exception e) {
-		e.printStackTrace();
-	}
-    javax.swing.JFrame frame = new javax.swing.JFrame("Modify Employee Test");
-    frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-    frame.setSize(900, 600);
-    frame.setLocationRelativeTo(null);
-    
-    // This creates and adds your panel directly
-    frame.add(new ModifyEmp()); 
-    
-    frame.setVisible(true);
-}}
+

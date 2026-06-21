@@ -23,8 +23,10 @@ public class Payrollgen extends JPanel {
     private JTextPane outputArea;
     private JButton generateButton;
     private JButton backButton;
+    private final int companyId;
 
-    public Payrollgen() {
+    public Payrollgen(int companyId) {
+        this.companyId = companyId;
 
         setLayout(new BorderLayout(10, 10));
         setBackground(BG);
