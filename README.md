@@ -29,16 +29,17 @@ Employee Payroll Generator is a Java-based desktop application developed using J
 - Eclipse IDE
 
 ## Project Structure
+EmployeePayrollGenerator/
+│
+├── src/
+│   ├── dao/
+│   ├── database/
+│   ├── model/
+│   ├── service/
+├   ├── ui/
+│   └── utils/
+└── images/
 
-```
-src/
-├── dao/
-├── database/
-├── model/
-├── service/
-├── ui/
-├── utils/
-```
 
 ## Database
 
